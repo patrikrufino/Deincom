@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo na Ciência da Computação: Uma Exploração Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral with Teal Accent -->
+    <!-- Application Structure Plan: A dual-hub structure focusing on "Integrais" and "Derivadas". Users select a hub, which reveals associated application domains (e.g., AI, Graphics). Clicking a domain expands a card to show detailed text and an interactive visualization (e.g., a PID controller chart, a gradient descent animation). This non-linear, exploratory approach enhances engagement and understanding by allowing users to connect mathematical concepts to practical CS fields in a hands-on manner, which is more effective than reading a static document. -->
+    <!-- Visualization & Content Choices: 1. Gradient Descent (Derivatives -> AI): Goal: Show optimization. Method: Animated Chart.js line chart. Interaction: Button starts an animation of a point descending a curve to its minimum. Justification: Makes the abstract learning process of neural networks tangible. 2. PID Controller (Integrals/Derivates -> Robotics): Goal: Compare control strategies. Method: Interactive Chart.js line chart. Interaction: Sliders for P, I, D gains update the chart's response curve in real-time. Justification: Provides a playground to understand the direct impact of each calculus term on system stability. 3. Signal Filtering (Integrals -> Signal Processing): Goal: Inform about data transformation. Method: Chart.js line chart. Interaction: Button toggles between a noisy and a smoothed signal. Justification: Clearly visualizes the practical outcome of applying a discrete form of integration (moving average) to raw data. All choices use Chart.js on Canvas, adhering to the NO SVG/Mermaid constraint. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 350px; }
+        .slider-track { background: #e2e8f0; }
+        .slider-thumb { background: #14b8a6; }
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+        }
+        .details-content.open {
+            max-height: 2000px; 
+        }
+        .nav-button.active {
+            background-color: #0d9488;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-teal-700 mb-2">O Cálculo no Coração da Computação</h1>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">Uma exploração interativa de como as integrais e derivadas impulsionam a tecnologia que usamos todos os dias.</p>
+        </header>
+
+        <nav class="flex justify-center mb-12 space-x-4">
+            <button id="nav-integrals" class="nav-button py-2 px-6 bg-white text-teal-700 rounded-full shadow-md hover:bg-teal-50 transition-colors duration-300 font-semibold">
+                Aplicações de Integrais
+            </button>
+            <button id="nav-derivatives" class="nav-button py-2 px-6 bg-white text-teal-700 rounded-full shadow-md hover:bg-teal-50 transition-colors duration-300 font-semibold">
+                Aplicações de Derivadas
+            </button>
+        </nav>
+
+        <main id="content-area">
+        </main>
+
+    </div>
+
+    <script>
+        const contentData = {
+            integrals: [
+                {
+                    id: 'signal',
+                    title: 'Processamento de Sinais e Imagens',
+                    summary: 'Integrais são usadas para filtrar ruídos, comprimir dados (JPEG, MP3) e analisar características em sinais e imagens através de conceitos como a Transformada de Fourier e convolução.',
+                    details: `
+                        <p class="mb-4">No processamento de sinais e imagens, a capacidade de acumular ou transformar dados ao longo do tempo ou espaço é fundamental. As integrais fornecem a base matemática para isso.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li><strong>Filtragem de Sinais:</strong> Filtros de média móvel, uma forma discreta de integração, suavizam dados ruidosos de sensores ou áudio.</li>
+                            <li><strong>Transformadas (Fourier, Laplace):</strong> Definidas por integrais, essas transformadas convertem sinais para o domínio da frequência, permitindo compressão de dados (como em MP3 e JPEG) e análise de características (reconhecimento de voz).</li>
+                            <li><strong>Convolução:</strong> Usada em visão computacional, a convolução (uma integral) aplica filtros para suavizar imagens, detectar bordas e extrair características em Redes Neurais Convolucionais.</li>
+                        </ul>
+                        <p class="mb-4"><strong>Exemplo Interativo:</strong> O gráfico abaixo mostra um sinal com ruído. Clique no botão para aplicar um filtro de média móvel (uma aproximação da integração) e veja como o sinal é suavizado, tornando a tendência subjacente mais clara.</p>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner mb-4 h-80">
+                            <canvas id="signal-chart"></canvas>
+                        </div>
+                        <div class="text-center">
+                            <button id="toggle-filter-btn" class="bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition">Aplicar Filtro (Integração)</button>
+                        </div>
+                    `
+                },
+                {
+                    id: 'probability',
+                    title: 'Probabilidade e IA',
+                    summary: 'Em Machine Learning, integrais calculam probabilidades para eventos contínuos (usando Funções de Densidade de Probabilidade - PDFs) e o "valor esperado" de uma decisão.',
+                    details: `
+                        <p class="mb-4">A Inteligência Artificial e o Machine Learning dependem da quantificação da incerteza e da análise de distribuições de dados. As integrais são a espinha dorsal desses cálculos.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li><strong>Funções de Densidade de Probabilidade (PDFs):</strong> A probabilidade de uma variável contínua (como a altura de uma pessoa) cair em um intervalo é a área sob a curva da PDF, calculada por uma integral.</li>
+                            <li><strong>Valor Esperado:</strong> O valor médio "ponderado" de uma variável aleatória contínua é calculado com uma integral. Isso é vital para avaliar riscos e otimizar modelos em áreas como finanças (detecção de fraudes) e veículos autônomos.</li>
+                        </ul>
+                        <p class="mb-4">Por exemplo, um carro autônomo pode usar o valor esperado para calcular o risco de diferentes trajetórias, integrando as probabilidades de vários resultados (como um pedestre atravessar a rua) para tomar a decisão mais segura.</p>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner mb-4 h-80">
+                            <canvas id="probability-chart"></canvas>
+                        </div>
+                    `
+                },
+                 {
+                    id: 'graphics',
+                    title: 'Computação Gráfica e Simulações',
+                    summary: 'Integrais calculam volumes de objetos 3D e, mais importante, simulam como a luz interage em uma cena para criar imagens realistas através do Ray Tracing.',
+                    details: `
+                        <p class="mb-4">Para criar mundos virtuais realistas, os computadores precisam simular a física do mundo real. As integrais são essenciais para modelar a geometria e a interação da luz.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li><strong>Cálculo de Volume e Massa:</strong> Em softwares de modelagem 3D (CAD) e jogos, o volume de objetos complexos é calculado por integração, o que é crucial para simular a física (massa, inércia).</li>
+                            <li><strong>Renderização e Iluminação (Ray Tracing):</strong> A criação de imagens fotorrealistas envolve resolver a "Equação de Renderização", uma equação integral complexa que descreve como a luz se espalha e reflete em uma cena. Métodos como a "Integração Monte Carlo" são usados para aproximar a solução, traçando caminhos de luz aleatórios para calcular a iluminação, sombras e reflexos.</li>
+                        </ul>
+                        <p class="mb-4">Cada pixel em um filme de animação moderno é o resultado de resolver massivamente essas integrais para simular a luz com precisão, criando o visual realista que vemos na tela.</p>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner mb-4 h-80">
+                            <canvas id="graphics-chart"></canvas>
+                        </div>
+                    `
+                }
+            ],
+            derivatives: [
+                {
+                    id: 'ai',
+                    title: 'Inteligência Artificial e Machine Learning',
+                    summary: 'O treinamento de redes neurais é um processo de otimização impulsionado por derivadas. O algoritmo de Descida do Gradiente usa derivadas para minimizar o erro do modelo.',
+                    details: `
+                        <p class="mb-4">As derivadas são o motor da otimização em Machine Learning. A capacidade de um modelo "aprender" a partir dos dados depende fundamentalmente do cálculo de taxas de variação.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li><strong>Descida do Gradiente:</strong> É o principal algoritmo de otimização. Ele calcula a derivada (o gradiente) da função de erro do modelo para determinar a "direção" em que os parâmetros do modelo devem ser ajustados para reduzir o erro.</li>
+                            <li><strong>Backpropagation:</strong> Em redes neurais, a Regra da Cadeia (uma regra de derivação) é usada para calcular eficientemente os gradientes de todos os pesos na rede, permitindo que o erro seja propagado "para trás" e os pesos sejam atualizados.</li>
+                        </ul>
+                        <p class="mb-4"><strong>Exemplo Interativo:</strong> O gráfico abaixo mostra uma função de custo que queremos minimizar. Clique no botão para iniciar a animação da Descida do Gradiente. O ponto representa nosso modelo, e ele dará "passos" na direção oposta ao gradiente (a inclinação da curva, dada pela derivada) até encontrar o ponto mais baixo (erro mínimo).</p>
+                         <div class="chart-container bg-white p-4 rounded-lg shadow-inner mb-4 h-80">
+                            <canvas id="ai-chart"></canvas>
+                        </div>
+                        <div class="text-center">
+                            <button id="start-gradient-btn" class="bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition">Iniciar Animação</button>
+                        </div>
+                    `
+                },
+                {
+                    id: 'robotics',
+                    title: 'Robótica e Sistemas de Controle',
+                    summary: 'Controladores PID, que são fundamentais em robótica, usam termos Proporcional (presente), Integral (passado) e Derivativo (futuro) para controlar movimentos com precisão.',
+                    details: `
+                        <p class="mb-4">Para que um robô (como um drone ou um braço mecânico) se mova de forma estável e precisa, ele precisa de um sistema de controle. O controlador PID (Proporcional-Integral-Derivativo) é um dos mais comuns e depende diretamente de conceitos de cálculo.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li><strong>Termo Proporcional (P):</strong> Reage ao erro atual.</li>
+                            <li><strong>Termo Integral (I):</strong> Acumula erros passados para eliminar desvios persistentes. Usa o conceito de <strong>integração</strong>.</li>
+                            <li><strong>Termo Derivativo (D):</strong> Antecipa o erro futuro observando sua taxa de variação. Usa o conceito de <strong>derivação</strong> para evitar oscilações e "frear" o sistema.</li>
+                        </ul>
+                        <p class="mb-4"><strong>Exemplo Interativo:</strong> O gráfico mostra um sistema tentando atingir um valor alvo (Setpoint). Ajuste os ganhos Proporcional (P), Integral (I) e Derivativo (D) com os sliders e veja como a resposta do sistema muda. Tente encontrar uma combinação que atinja o alvo rapidamente, com pouca oscilação (overshoot).</p>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner mb-4 h-80">
+                            <canvas id="robotics-chart"></canvas>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-2">
+                            <div>
+                                <label for="p-slider" class="block text-sm font-medium text-slate-700">Ganho Proporcional (P): <span id="p-value">0.3</span></label>
+                                <input id="p-slider" type="range" min="0" max="1" step="0.01" value="0.3" class="w-full h-2 rounded-lg appearance-none cursor-pointer slider-track">
+                            </div>
+                            <div>
+                                <label for="i-slider" class="block text-sm font-medium text-slate-700">Ganho Integral (I): <span id="i-value">0.02</span></label>
+                                <input id="i-slider" type="range" min="0" max="0.1" step="0.001" value="0.02" class="w-full h-2 rounded-lg appearance-none cursor-pointer slider-track">
+                            </div>
+                            <div>
+                                <label for="d-slider" class="block text-sm font-medium text-slate-700">Ganho Derivativo (D): <span id="d-value">0.4</span></label>
+                                <input id="d-slider" type="range" min="0" max="2" step="0.01" value="0.4" class="w-full h-2 rounded-lg appearance-none cursor-pointer slider-track">
+                            </div>
+                        </div>
+                    `
+                },
+                 {
+                    id: 'animation',
+                    title: 'Computação Gráfica e Animação',
+                    summary: 'Derivadas são a base da simulação de física em jogos e animações, definindo velocidade (derivada da posição) e aceleração (derivada da velocidade) para criar movimentos realistas.',
+                     details: `
+                        <p class="mb-4">Em gráficos computacionais, as derivadas são indispensáveis para simular movimento e para renderizar superfícies de forma realista.</p>
+                        <ul class="list-disc list-inside mb-4 space-y-2">
+                            <li><strong>Animação e Física:</strong> Para animar um personagem ou simular um objeto em um motor de jogo, o sistema precisa saber sua velocidade (a primeira derivada da posição em relação ao tempo) e sua aceleração (a segunda derivada). Isso permite a simulação de gravidade, colisões e outras forças.</li>
+                            <li><strong>Cálculo de Normais:</strong> Para que um objeto 3D seja iluminado corretamente, o computador precisa saber a orientação de sua superfície em cada ponto. Isso é feito calculando o "vetor normal" (um vetor perpendicular à superfície), que é obtido através das derivadas da função que descreve a superfície.</li>
+                            <li><strong>Detecção de Bordas:</strong> Em processamento de imagens, filtros como o de Sobel usam derivadas para encontrar áreas de alta variação de cor, que correspondem a bordas em uma imagem.</li>
+                        </ul>
+                        <p class="mb-4"><strong>Exemplo Interativo:</strong> O gráfico abaixo ilustra a posição, velocidade e aceleração de um objeto em movimento, demonstrando como as derivadas (velocidade = derivada da posição, aceleração = derivada da velocidade) descrevem a dinâmica de um sistema. Pense em um objeto oscilando, por exemplo.</p>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner mb-4 h-80">
+                            <canvas id="animation-chart"></canvas>
+                        </div>
+                    `
+                }
+            ]
+        };
+
+        const contentArea = document.getElementById('content-area');
+        const navIntegrals = document.getElementById('nav-integrals');
+        const navDerivatives = document.getElementById('nav-derivatives');
+
+        let activeCharts = {};
+
+        function destroyChart(id) {
+            if (activeCharts[id]) {
+                activeCharts[id].destroy();
+                delete activeCharts[id];
+            }
+        }
+        
+        function destroyAllCharts() {
+            Object.keys(activeCharts).forEach(id => {
+                destroyChart(id);
+            });
+        }
+
+        function createCard(item) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl shadow-lg mb-6 overflow-hidden transition-all duration-500';
+            card.innerHTML = `
+                <div class="p-6 cursor-pointer hover:bg-slate-50">
+                    <h3 class="text-xl font-bold text-teal-700 mb-2">${item.title}</h3>
+                    <p class="text-slate-600">${item.summary}</p>
+                </div>
+                <div id="details-${item.id}" class="details-content bg-slate-50/50 p-6 border-t border-slate-200">
+                    ${item.details}
+                </div>
+            `;
+            
+            card.querySelector('.p-6').addEventListener('click', () => {
+                const details = card.querySelector('.details-content');
+                const wasOpen = details.classList.contains('open');
+
+                document.querySelectorAll('.details-content.open').forEach(openDetail => {
+                    openDetail.classList.remove('open');
+                });
+                
+                destroyAllCharts();
+
+                if (!wasOpen) {
+                    details.classList.add('open');
+                    
+                    // Add a listener to ensure the chart is initialized only after the transition ends
+                    const onTransitionEnd = (event) => {
+                        // Check if the transition is for max-height to avoid triggering on other property transitions
+                        if (event.propertyName === 'max-height') {
+                            initializeChart(item.id);
+                            // Remove the event listener after it fires once to prevent multiple calls
+                            details.removeEventListener('transitionend', onTransitionEnd);
+                        }
+                    };
+                    details.addEventListener('transitionend', onTransitionEnd);
+
+                    // Fallback for cases where transition might not fire or is too quick for Chart.js
+                    // This can be useful if the max-height was already reached or if CSS transition is removed/disabled.
+                    // If the transition is not properly set up, this timeout acts as a failsafe.
+                    setTimeout(() => {
+                         if (!activeCharts[item.id]) { // Only initialize if not already initialized by transitionend
+                            initializeChart(item.id);
+                            details.removeEventListener('transitionend', onTransitionEnd); // Ensure listener is removed
+                         }
+                    }, 750); // Slightly longer than the CSS transition duration
+                }
+            });
+
+            return card;
+        }
+
+        function renderContent(category) {
+            destroyAllCharts();
+            contentArea.innerHTML = '';
+            const items = contentData[category];
+            items.forEach(item => {
+                contentArea.appendChild(createCard(item));
+            });
+        }
+
+        function initializeChart(id) {
+            destroyChart(id);
+            // Ensure the canvas element exists in the DOM before attempting to get its context
+            const canvasElement = document.getElementById(`${id}-chart`);
+            if (!canvasElement) {
+                console.error(`Canvas element with ID '${id}-chart' not found.`);
+                return;
+            }
+
+            switch(id) {
+                case 'signal': createSignalChart(); break;
+                case 'ai': createAiChart(); break;
+                case 'robotics': createRoboticsChart(); break;
+                case 'animation': createAnimationChart(); break;
+                case 'graphics': createGraphicsChart(); break;
+                case 'probability': createProbabilityChart(); break; // Added this line
+            }
+        }
+
+        navIntegrals.addEventListener('click', () => {
+            renderContent('integrals');
+            navIntegrals.classList.add('active');
+            navDerivatives.classList.remove('active');
+        });
+
+        navDerivatives.addEventListener('click', () => {
+            renderContent('derivatives');
+            navDerivatives.classList.add('active');
+            navIntegrals.classList.remove('active');
+        });
+        
+        renderContent('integrals');
+        navIntegrals.classList.add('active');
+
+
+        function createSignalChart() {
+            const ctx = document.getElementById('signal-chart').getContext('2d');
+            const labels = Array.from({length: 50}, (_, i) => i + 1);
+            const noisyData = labels.map(x => Math.sin(x/5) * 10 + (Math.random() - 0.5) * 5);
+            
+            function movingAverage(data, windowSize) {
+                let result = [];
+                for (let i = 0; i < data.length; i++) {
+                    let start = Math.max(0, i - Math.floor(windowSize / 2));
+                    let end = Math.min(data.length, i + Math.ceil(windowSize / 2));
+                    let sum = 0;
+                    for (let j = start; j < end; j++) {
+                        sum += data[j];
+                    }
+                    result.push(sum / (end - start));
+                }
+                return result;
+            }
+
+            const filteredData = movingAverage(noisyData, 5);
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sinal com Ruído',
+                        data: noisyData,
+                        borderColor: '#fb923c',
+                        backgroundColor: '#fb923c20',
+                        tension: 0.1,
+                        pointRadius: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: false } },
+                    plugins: { legend: { position: 'top' } }
+                }
+            };
+            
+            activeCharts['signal'] = new Chart(ctx, chartConfig);
+
+            let isFiltered = false;
+            // Ensure the event listener is re-attached every time the chart is created/re-created
+            document.getElementById('toggle-filter-btn').onclick = () => { // Use onclick to easily overwrite previous listeners
+                isFiltered = !isFiltered;
+                const chart = activeCharts['signal'];
+                if(isFiltered) {
+                    chart.data.datasets.push({
+                        label: 'Sinal Filtrado (Suavizado)',
+                        data: filteredData,
+                        borderColor: '#14b8a6',
+                        backgroundColor: '#14b8a620',
+                        tension: 0.4,
+                        pointRadius: 0,
+                    });
+                    document.getElementById('toggle-filter-btn').textContent = 'Remover Filtro';
+                } else {
+                    chart.data.datasets.pop();
+                     document.getElementById('toggle-filter-btn').textContent = 'Aplicar Filtro (Integração)';
+                }
+                chart.update();
+            };
+        }
+        
+        function createAiChart() {
+            const ctx = document.getElementById('ai-chart').getContext('2d');
+            
+            const costFunction = x => (x - 5) ** 2 + 3;
+            const labels = Array.from({length: 11}, (_, i) => i);
+            const costData = labels.map(costFunction);
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Função de Custo',
+                            data: costData,
+                            borderColor: '#6366f1',
+                            backgroundColor: '#6366f120',
+                            tension: 0.4,
+                            pointRadius: 0,
+                        },
+                        {
+                            label: 'Ponto Atual',
+                            data: [{x: 0.5, y: costFunction(0.5)}],
+                            borderColor: '#ec4899',
+                            backgroundColor: '#ec4899',
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { type: 'linear', position: 'bottom' },
+                        y: { beginAtZero: false }
+                    },
+                    plugins: { legend: { position: 'top' } }
+                }
+            };
+
+            activeCharts['ai'] = new Chart(ctx, chartConfig);
+
+            let animationInterval;
+            // Ensure the event listener is re-attached every time the chart is created/re-created
+            document.getElementById('start-gradient-btn').onclick = () => { // Use onclick to easily overwrite previous listeners
+                clearInterval(animationInterval);
+                let currentX = 0.5;
+                const learningRate = 0.2;
+                const costDerivative = x => 2 * (x - 5);
+                
+                const chart = activeCharts['ai'];
+                chart.data.datasets[1].data = [{x: currentX, y: costFunction(currentX)}];
+                chart.update();
+
+                animationInterval = setInterval(() => {
+                    const gradient = costDerivative(currentX);
+                    currentX -= learningRate * gradient;
+
+                    if (Math.abs(gradient) < 0.01) {
+                        clearInterval(animationInterval);
+                    }
+                    
+                    chart.data.datasets[1].data = [{x: currentX, y: costFunction(currentX)}];
+                    chart.update('none');
+
+                }, 200);
+            };
+        }
+
+        function createRoboticsChart() {
+            const pSlider = document.getElementById('p-slider');
+            const iSlider = document.getElementById('i-slider');
+            const dSlider = document.getElementById('d-slider');
+
+            const pValueSpan = document.getElementById('p-value');
+            const iValueSpan = document.getElementById('i-value');
+            const dValueSpan = document.getElementById('d-value');
+
+            const ctx = document.getElementById('robotics-chart').getContext('2d');
+
+            function updateChart() {
+                destroyChart('robotics'); // Destroy existing chart before creating a new one
+                const Kp = parseFloat(pSlider.value);
+                const Ki = parseFloat(iSlider.value);
+                const Kd = parseFloat(dSlider.value);
+                
+                pValueSpan.textContent = Kp.toFixed(2);
+                iValueSpan.textContent = Ki.toFixed(3);
+                dValueSpan.textContent = Kd.toFixed(2);
+
+                const setpoint = 100;
+                let currentValue = 0;
+                let integral = 0;
+                let previousError = 0;
+                
+                const responseData = [];
+                for(let t = 0; t < 100; t++) {
+                    const error = setpoint - currentValue;
+                    integral += error;
+                    const derivative = error - previousError;
+                    
+                    const output = Kp * error + Ki * integral + Kd * derivative;
+                    
+                    currentValue += output;
+                    responseData.push(currentValue);
+                    
+                    previousError = error;
+                }
+
+                const chartConfig = {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 100}, (_, i) => i),
+                        datasets: [
+                            {
+                                label: 'Resposta do Sistema',
+                                data: responseData,
+                                borderColor: '#22c55e',
+                                tension: 0.1,
+                                pointRadius: 0
+                            },
+                            {
+                                label: 'Setpoint (Alvo)',
+                                data: Array(100).fill(setpoint),
+                                borderColor: '#ef4444',
+                                borderDash: [5, 5],
+                                pointRadius: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: false, max: setpoint * 1.8 } },
+                        plugins: { legend: { position: 'top' } },
+                        animation: { duration: 0 }
+                    }
+                };
+                activeCharts['robotics'] = new Chart(ctx, chartConfig);
+            }
+
+            // Ensure event listeners are re-attached when chart is created/re-created
+            pSlider.oninput = updateChart;
+            iSlider.oninput = updateChart;
+            dSlider.oninput = updateChart;
+            
+            updateChart(); // Initial chart render for robotics
+        }
+
+        // New function for Animation chart
+        function createAnimationChart() {
+            const ctx = document.getElementById('animation-chart').getContext('2d');
+            const labels = Array.from({length: 100}, (_, i) => i);
+
+            // Simulate a simple damped oscillation for position
+            const positionData = labels.map(t => Math.exp(-0.05 * t) * Math.sin(0.2 * t));
+            
+            // Approximate velocity (derivative of position) using finite difference
+            const velocityData = labels.map((t, i) => {
+                if (i === 0) return 0; // Initial velocity
+                return (positionData[i] - positionData[i-1]); // Assuming dt = 1 for simplicity
+            });
+            
+            // Approximate acceleration (derivative of velocity) using finite difference
+            const accelerationData = labels.map((t, i) => {
+                if (i === 0) return 0; // Initial acceleration
+                return (velocityData[i] - velocityData[i-1]); // Assuming dt = 1 for simplicity
+            });
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Posição (x)',
+                            data: positionData,
+                            borderColor: '#2563eb', // Blue
+                            backgroundColor: '#2563eb20',
+                            tension: 0.2,
+                            pointRadius: 0,
+                        },
+                        {
+                            label: 'Velocidade (dx/dt)',
+                            data: velocityData,
+                            borderColor: '#f59e0b', // Amber
+                            backgroundColor: '#f59e0b20',
+                            tension: 0.2,
+                            pointRadius: 0,
+                        },
+                        {
+                            label: 'Aceleração (d²x/dt²)',
+                            data: accelerationData,
+                            borderColor: '#ef4444', // Red
+                            backgroundColor: '#ef444420',
+                            tension: 0.2,
+                            pointRadius: 0,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: false } },
+                    plugins: { legend: { position: 'top' } }
+                }
+            };
+            activeCharts['animation'] = new Chart(ctx, chartConfig);
+        }
+
+        // New function for Graphics chart
+        function createGraphicsChart() {
+            const ctx = document.getElementById('graphics-chart').getContext('2d');
+            const labels = Array.from({length: 21}, (_, i) => i * 0.5); // x from 0 to 10
+            const curveData = labels.map(x => -0.1 * x * (x - 10) + 2); // A simple parabolic-like curve
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Curva para Cálculo de Área/Volume',
+                            data: curveData,
+                            borderColor: '#0d9488', // Teal
+                            backgroundColor: 'rgba(13, 148, 136, 0.2)', // Light teal fill for area
+                            tension: 0.3,
+                            pointRadius: 2,
+                            fill: true, // Fill the area under the curve
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        x: { beginAtZero: true, title: { display: true, text: 'Dimensão X' } },
+                        y: { beginAtZero: true, title: { display: true, text: 'Dimensão Y / Altura' } }
+                    },
+                    plugins: { legend: { position: 'top' } }
+                }
+            };
+            activeCharts['graphics'] = new Chart(ctx, chartConfig);
+        }
+
+        // New function for Probability chart
+        function createProbabilityChart() {
+            const ctx = document.getElementById('probability-chart').getContext('2d');
+            // Function for a simple Gaussian (Normal) distribution PDF
+            function gaussianPDF(x, mean, stdDev) {
+                return (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2));
+            }
+
+            const labels = Array.from({length: 100}, (_, i) => -5 + i * 0.1); // Range from -5 to 5
+            const mean = 0;
+            const stdDev = 1; // Standard deviation
+
+            const pdfData = labels.map(x => gaussianPDF(x, mean, stdDev));
+
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: labels.map(x => x.toFixed(1)), // Format labels for readability
+                    datasets: [
+                        {
+                            label: 'Função de Densidade de Probabilidade (PDF)',
+                            data: pdfData,
+                            borderColor: '#8b5cf6', // Purple
+                            backgroundColor: 'rgba(139, 92, 246, 0.2)', // Light purple fill
+                            tension: 0.4,
+                            pointRadius: 0,
+                            fill: true,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'Valor da Variável Aleatória' } },
+                        y: { beginAtZero: true, title: { display: true, text: 'Densidade de Probabilidade' } }
+                    },
+                    plugins: { legend: { position: 'top' } }
+                }
+            };
+            activeCharts['probability'] = new Chart(ctx, chartConfig);
+        }
+
+    </script>
+</body>
+</html>
