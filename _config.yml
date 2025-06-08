@@ -1,0 +1,43 @@
+# Configuração do GitHub Pages para o projeto Cálculo na Ciência da Computação
+
+# Informações básicas do site
+title: "Cálculo na Ciência da Computação"
+description: "Uma exploração interativa de como as integrais e derivadas impulsionam a tecnologia que usamos todos os dias"
+url: "https://patrikrufino.github.io/Deincom/"  # Substitua USERNAME pelo seu nome de usuário do GitHub
+baseurl: "/Deincom"        # Substitua REPOSITORY_NAME pelo nome do seu repositório
+
+# Configurações do GitHub Pages
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Configurações de tema (usando tema padrão)
+# theme: minima  # Comentado porque estamos usando HTML customizado
+
+# Configurações de markdown
+markdown: kramdown
+highlighter: rouge
+
+# Configurações de exclusão
+exclude:
+  - README.md
+  - LICENSE
+
+# Configurações de inclusão para garantir que os arquivos HTML sejam processados
+include:
+  - index.html
+  - artigo.html
+
+# Configurações SEO
+lang: pt-BR
+author: "Seu Nome"  # Substitua pelo seu nome
+
+# Configurações de social media (opcional)
+# twitter:
+#   username: seu_twitter
+# github:
+#   username: seu_github
+
+# Configurações de Google Analytics (opcional)
+# google_analytics: UA-XXXXXXXX-X
