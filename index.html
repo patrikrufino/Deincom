@@ -15,6 +15,7 @@
     <style>
       /* Base Hacker Theme Colors */
       :root {
+        overflow-y: scroll;
         --hacker-bg: #0d1117;
         --hacker-secondary-bg: #161b22;
         --hacker-border: #21262d;
@@ -48,7 +49,7 @@
             rgba(0, 255, 65, 0.1) 0%,
             transparent 50%
           );
-        min-height: 100vh;
+        height: 100%;
       }
 
       .container {
@@ -160,6 +161,7 @@
         overflow: hidden;
         transition: all 0.3s ease;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        position: relative;
       }
 
       .card:hover {
@@ -168,15 +170,80 @@
         transform: translateY(-5px);
       }
 
+      .card::before {
+        content: "Clique para expandir";
+        position: absolute;
+        top: 5px;
+        right: 15px;
+        font-size: 0.7rem;
+        color: var(--hacker-text-secondary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        pointer-events: none;
+      }
+
+      .card:hover::before {
+        opacity: 0.8;
+      }
+
       .card-header {
         padding: 25px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
         border-bottom: 1px solid var(--hacker-border);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .card-header:hover {
         background: rgba(0, 255, 65, 0.05);
+      }
+
+      .card-header::after {
+        content: "▼";
+        color: var(--hacker-accent);
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+        margin-left: 15px;
+        flex-shrink: 0;
+        animation: pulse 2s infinite;
+      }
+
+      .card-header.expanded::after {
+        transform: rotate(180deg);
+        animation: none;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+      }
+
+      .card-content {
+        flex: 1;
+      }
+
+      /* Adicionar indicação visual de clicável */
+      .card-header:hover::after {
+        color: var(--hacker-accent-hover);
+        text-shadow: 0 0 5px var(--hacker-accent);
+        animation: none;
+        transform: scale(1.2);
+      }
+
+      .card-header.expanded:hover::after {
+        transform: rotate(180deg) scale(1.2);
       }
 
       .card-title {
@@ -575,8 +642,10 @@
         card.className = "card";
         card.innerHTML = `
                 <div class="card-header">
-                    <h3 class="card-title">${item.title}</h3>
-                    <p class="card-summary">${item.summary}</p>
+                    <div class="card-content">
+                        <h3 class="card-title">${item.title}</h3>
+                        <p class="card-summary">${item.summary}</p>
+                    </div>
                 </div>
                 <div id="details-${item.id}" class="details-content">
                     <div class="details-inner">
@@ -585,20 +654,31 @@
                 </div>
             `;
 
-        card.querySelector(".card-header").addEventListener("click", () => {
-          const details = card.querySelector(".details-content");
+        const header = card.querySelector(".card-header");
+        const details = card.querySelector(".details-content");
+
+        header.addEventListener("click", () => {
           const wasOpen = details.classList.contains("open");
 
+          // Close all other open details
           document
             .querySelectorAll(".details-content.open")
             .forEach((openDetail) => {
               openDetail.classList.remove("open");
             });
 
+          // Remove expanded class from all headers
+          document
+            .querySelectorAll(".card-header.expanded")
+            .forEach((expandedHeader) => {
+              expandedHeader.classList.remove("expanded");
+            });
+
           destroyAllCharts();
 
           if (!wasOpen) {
             details.classList.add("open");
+            header.classList.add("expanded");
 
             // Add a listener to ensure the chart is initialized only after the transition ends
             const onTransitionEnd = (event) => {
@@ -612,8 +692,6 @@
             details.addEventListener("transitionend", onTransitionEnd);
 
             // Fallback for cases where transition might not fire or is too quick for Chart.js
-            // This can be useful if the max-height was already reached or if CSS transition is removed/disabled.
-            // If the transition is not properly set up, this timeout acts as a failsafe.
             setTimeout(() => {
               if (!activeCharts[item.id]) {
                 // Only initialize if not already initialized by transitionend
@@ -784,7 +862,6 @@
                 pointRadius: 8,
                 showLine: false,
               },
-              },
             ],
           },
           options: {
@@ -798,18 +875,18 @@
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41"
-                }
-              }
+                  color: "#00ff41",
+                },
+              },
             },
             elements: {
               line: {
-                borderColor: "#00ff41"
+                borderColor: "#00ff41",
               },
               point: {
-                backgroundColor: "#00ff41"
-              }
-            }
+                backgroundColor: "#00ff41",
+              },
+            },
           },
         };
 
@@ -859,7 +936,17 @@
 
         const ctx = document.getElementById("robotics-chart").getContext("2d");
 
-        function pidController(setpoint, currentValue, error, integral, derivative, dt, kp, ki, kd) {
+        function pidController(
+          setpoint,
+          currentValue,
+          error,
+          integral,
+          derivative,
+          dt,
+          kp,
+          ki,
+          kd
+        ) {
           const newError = setpoint - currentValue;
           integral += newError * dt;
           derivative = (newError - error) / dt;
@@ -882,7 +969,17 @@
 
           for (let i = 0; i < timeSteps; i++) {
             const time = i * dt;
-            const result = pidController(setpoint, currentValue, error, integral, derivative, dt, kp, ki, kd);
+            const result = pidController(
+              setpoint,
+              currentValue,
+              error,
+              integral,
+              derivative,
+              dt,
+              kp,
+              ki,
+              kd
+            );
 
             // Simple first-order system response
             currentValue += result.output * dt * 0.1;
@@ -912,7 +1009,9 @@
           if (chart) {
             chart.data.labels = simulation.labels;
             chart.data.datasets[0].data = simulation.data;
-            chart.data.datasets[1].data = Array(simulation.data.length).fill(simulation.setpoint);
+            chart.data.datasets[1].data = Array(simulation.data.length).fill(
+              simulation.setpoint
+            );
             chart.update();
           }
         }
@@ -946,16 +1045,21 @@
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-              y: { beginAtZero: false, title: { display: true, text: "Valor", color: "#00ff41" } },
-              x: { title: { display: true, text: "Tempo (s)", color: "#00ff41" } },
+              y: {
+                beginAtZero: false,
+                title: { display: true, text: "Valor", color: "#00ff41" },
+              },
+              x: {
+                title: { display: true, text: "Tempo (s)", color: "#00ff41" },
+              },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41"
-                }
-              }
+                  color: "#00ff41",
+                },
+              },
             },
           },
         };
@@ -972,14 +1076,14 @@
         const ctx = document.getElementById("animation-chart").getContext("2d");
 
         const time = Array.from({ length: 100 }, (_, i) => i * 0.1);
-        const position = time.map(t => 5 * Math.sin(t) + 5);
-        const velocity = time.map(t => 5 * Math.cos(t));
-        const acceleration = time.map(t => -5 * Math.sin(t));
+        const position = time.map((t) => 5 * Math.sin(t) + 5);
+        const velocity = time.map((t) => 5 * Math.cos(t));
+        const acceleration = time.map((t) => -5 * Math.sin(t));
 
         const chartConfig = {
           type: "line",
           data: {
-            labels: time.map(t => t.toFixed(1)),
+            labels: time.map((t) => t.toFixed(1)),
             datasets: [
               {
                 label: "Posição",
@@ -1012,15 +1116,17 @@
             maintainAspectRatio: false,
             scales: {
               y: { title: { display: true, text: "Valor", color: "#00ff41" } },
-              x: { title: { display: true, text: "Tempo (s)", color: "#00ff41" } },
+              x: {
+                title: { display: true, text: "Tempo (s)", color: "#00ff41" },
+              },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41"
-                }
-              }
+                  color: "#00ff41",
+                },
+              },
             },
           },
         };
@@ -1033,9 +1139,10 @@
 
         // Simulating ray tracing samples for Monte Carlo integration
         const samples = Array.from({ length: 50 }, (_, i) => i + 1);
-        const lightIntensity = samples.map(n => {
+        const lightIntensity = samples.map((n) => {
           // Simulating convergence of Monte Carlo integration
-          const convergence = 10 * (1 - Math.exp(-n/10)) + Math.random() * 2 - 1;
+          const convergence =
+            10 * (1 - Math.exp(-n / 10)) + Math.random() * 2 - 1;
           return Math.max(0, convergence);
         });
 
@@ -1060,18 +1167,164 @@
             maintainAspectRatio: false,
             scales: {
               y: {
-                title: { display: true, text: "Intensidade da Luz", color: "#00ff41" },
-                beginAtZero: true
+                title: {
+                  display: true,
+                  text: "Intensidade da Luz",
+                  color: "#00ff41",
+                },
+                beginAtZero: true,
               },
-              x: { title: { display: true, text: "Número de Amostras Ray Tracing", color: "#00ff41" } },
+              x: {
+                title: {
+                  display: true,
+                  text: "Número de Amostras Ray Tracing",
+                  color: "#00ff41",
+                },
+              },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41"
-                }
-              }
+                  color: "#00ff41",
+                },
+              },
+            },
+          },
+        };
+
+        activeCharts["graphics"] = new Chart(ctx, chartConfig);
+      }
+
+      // Fixed and unified functions with Hacker theme colors
+      function createAnimationChart() {
+        const ctx = document.getElementById("animation-chart").getContext("2d");
+
+        const time = Array.from({ length: 100 }, (_, i) => i * 0.1);
+        const position = time.map((t) => 5 * Math.sin(t) + 5);
+        const velocity = time.map((t) => 5 * Math.cos(t));
+        const acceleration = time.map((t) => -5 * Math.sin(t));
+
+        const chartConfig = {
+          type: "line",
+          data: {
+            labels: time.map((t) => t.toFixed(1)),
+            datasets: [
+              {
+                label: "Posição",
+                data: position,
+                borderColor: "#00ff41",
+                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                tension: 0.4,
+                pointRadius: 0,
+              },
+              {
+                label: "Velocidade (1ª Derivada)",
+                data: velocity,
+                borderColor: "#00cc33",
+                backgroundColor: "rgba(0, 204, 51, 0.2)",
+                tension: 0.4,
+                pointRadius: 0,
+              },
+              {
+                label: "Aceleração (2ª Derivada)",
+                data: acceleration,
+                borderColor: "#ff0040",
+                backgroundColor: "rgba(255, 0, 64, 0.2)",
+                tension: 0.4,
+                pointRadius: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                title: { display: true, text: "Valor", color: "#00ff41" },
+                grid: { color: "rgba(0, 255, 65, 0.1)" },
+                ticks: { color: "#00ff41" },
+              },
+              x: {
+                title: { display: true, text: "Tempo (s)", color: "#00ff41" },
+                grid: { color: "rgba(0, 255, 65, 0.1)" },
+                ticks: { color: "#00ff41" },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "top",
+                labels: {
+                  color: "#00ff41",
+                },
+              },
+            },
+          },
+        };
+
+        activeCharts["animation"] = new Chart(ctx, chartConfig);
+      }
+
+      function createGraphicsChart() {
+        const ctx = document.getElementById("graphics-chart").getContext("2d");
+
+        // Simulating ray tracing samples for Monte Carlo integration
+        const samples = Array.from({ length: 50 }, (_, i) => i + 1);
+        const lightIntensity = samples.map((n) => {
+          // Simulating convergence of Monte Carlo integration
+          const convergence =
+            10 * (1 - Math.exp(-n / 10)) + Math.random() * 2 - 1;
+          return Math.max(0, convergence);
+        });
+
+        const chartConfig = {
+          type: "line",
+          data: {
+            labels: samples,
+            datasets: [
+              {
+                label: "Convergência da Iluminação (Monte Carlo)",
+                data: lightIntensity,
+                borderColor: "#00ff41",
+                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                tension: 0.3,
+                pointRadius: 2,
+                pointBackgroundColor: "#00ff41",
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                title: {
+                  display: true,
+                  text: "Intensidade da Luz",
+                  color: "#00ff41",
+                },
+                beginAtZero: true,
+                grid: { color: "rgba(0, 255, 65, 0.1)" },
+                ticks: { color: "#00ff41" },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: "Número de Amostras Ray Tracing",
+                  color: "#00ff41",
+                },
+                grid: { color: "rgba(0, 255, 65, 0.1)" },
+                ticks: { color: "#00ff41" },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "top",
+                labels: {
+                  color: "#00ff41",
+                },
+              },
             },
           },
         };
@@ -1080,13 +1333,15 @@
       }
 
       function createProbabilityChart() {
-        const ctx = document.getElementById("probability-chart").getContext("2d");
+        const ctx = document
+          .getElementById("probability-chart")
+          .getContext("2d");
 
         // Normal distribution data
         const x = Array.from({ length: 100 }, (_, i) => (i - 50) / 10);
         const mean = 0;
         const stdDev = 1;
-        const pdf = x.map(val => {
+        const pdf = x.map((val) => {
           const exponent = -0.5 * Math.pow((val - mean) / stdDev, 2);
           return (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(exponent);
         });
@@ -1094,7 +1349,7 @@
         const chartConfig = {
           type: "line",
           data: {
-            labels: x.map(val => val.toFixed(1)),
+            labels: x.map((val) => val.toFixed(1)),
             datasets: [
               {
                 label: "Função de Densidade de Probabilidade (PDF)",
@@ -1112,271 +1367,36 @@
             maintainAspectRatio: false,
             scales: {
               y: {
-                title: { display: true, text: "Probabilidade", color: "#00ff41" },
-                beginAtZero: true
+                title: {
+                  display: true,
+                  text: "Densidade de Probabilidade",
+                  color: "#00ff41",
+                },
+                beginAtZero: true,
+                grid: { color: "rgba(0, 255, 65, 0.1)" },
+                ticks: { color: "#00ff41" },
               },
-              x: { title: { display: true, text: "Valor da Variável", color: "#00ff41" } },
+              x: {
+                title: {
+                  display: true,
+                  text: "Valor da Variável Aleatória",
+                  color: "#00ff41",
+                },
+                grid: { color: "rgba(0, 255, 65, 0.1)" },
+                ticks: { color: "#00ff41" },
+              },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41"
-                }
-              }
-            },
-          },
-        };
-
-        activeCharts["probability"] = new Chart(ctx, chartConfig);
-            currentX -= learningRate * gradient;
-
-            if (Math.abs(gradient) < 0.01) {
-              clearInterval(animationInterval);
-            }
-
-            chart.data.datasets[1].data = [
-              { x: currentX, y: costFunction(currentX) },
-            ];
-            chart.update("none");
-          }, 200);
-        };
-      }
-
-      function createRoboticsChart() {
-        const pSlider = document.getElementById("p-slider");
-        const iSlider = document.getElementById("i-slider");
-        const dSlider = document.getElementById("d-slider");
-
-        const pValueSpan = document.getElementById("p-value");
-        const iValueSpan = document.getElementById("i-value");
-        const dValueSpan = document.getElementById("d-value");
-
-        const ctx = document.getElementById("robotics-chart").getContext("2d");
-
-        function updateChart() {
-          destroyChart("robotics"); // Destroy existing chart before creating a new one
-          const Kp = parseFloat(pSlider.value);
-          const Ki = parseFloat(iSlider.value);
-          const Kd = parseFloat(dSlider.value);
-
-          pValueSpan.textContent = Kp.toFixed(2);
-          iValueSpan.textContent = Ki.toFixed(3);
-          dValueSpan.textContent = Kd.toFixed(2);
-
-          const setpoint = 100;
-          let currentValue = 0;
-          let integral = 0;
-          let previousError = 0;
-
-          const responseData = [];
-          for (let t = 0; t < 100; t++) {
-            const error = setpoint - currentValue;
-            integral += error;
-            const derivative = error - previousError;
-
-            const output = Kp * error + Ki * integral + Kd * derivative;
-
-            currentValue += output;
-            responseData.push(currentValue);
-
-            previousError = error;
-          }
-
-          const chartConfig = {
-            type: "line",
-            data: {
-              labels: Array.from({ length: 100 }, (_, i) => i),
-              datasets: [
-                {
-                  label: "Resposta do Sistema",
-                  data: responseData,
-                  borderColor: "#22c55e",
-                  tension: 0.1,
-                  pointRadius: 0,
+                  color: "#00ff41",
                 },
-                {
-                  label: "Setpoint (Alvo)",
-                  data: Array(100).fill(setpoint),
-                  borderColor: "#ef4444",
-                  borderDash: [5, 5],
-                  pointRadius: 0,
-                },
-              ],
+              },
             },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: { y: { beginAtZero: false, max: setpoint * 1.8 } },
-              plugins: { legend: { position: "top" } },
-              animation: { duration: 0 },
-            },
-          };
-          activeCharts["robotics"] = new Chart(ctx, chartConfig);
-        }
-
-        // Ensure event listeners are re-attached when chart is created/re-created
-        pSlider.oninput = updateChart;
-        iSlider.oninput = updateChart;
-        dSlider.oninput = updateChart;
-
-        updateChart(); // Initial chart render for robotics
-      }
-
-      // New function for Animation chart
-      function createAnimationChart() {
-        const ctx = document.getElementById("animation-chart").getContext("2d");
-        const labels = Array.from({ length: 100 }, (_, i) => i);
-
-        // Simulate a simple damped oscillation for position
-        const positionData = labels.map(
-          (t) => Math.exp(-0.05 * t) * Math.sin(0.2 * t)
-        );
-
-        // Approximate velocity (derivative of position) using finite difference
-        const velocityData = labels.map((t, i) => {
-          if (i === 0) return 0; // Initial velocity
-          return positionData[i] - positionData[i - 1]; // Assuming dt = 1 for simplicity
-        });
-
-        // Approximate acceleration (derivative of velocity) using finite difference
-        const accelerationData = labels.map((t, i) => {
-          if (i === 0) return 0; // Initial acceleration
-          return velocityData[i] - velocityData[i - 1]; // Assuming dt = 1 for simplicity
-        });
-
-        const chartConfig = {
-          type: "line",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Posição (x)",
-                data: positionData,
-                borderColor: "#2563eb", // Blue
-                backgroundColor: "#2563eb20",
-                tension: 0.2,
-                pointRadius: 0,
-              },
-              {
-                label: "Velocidade (dx/dt)",
-                data: velocityData,
-                borderColor: "#f59e0b", // Amber
-                backgroundColor: "#f59e0b20",
-                tension: 0.2,
-                pointRadius: 0,
-              },
-              {
-                label: "Aceleração (d²x/dt²)",
-                data: accelerationData,
-                borderColor: "#ef4444", // Red
-                backgroundColor: "#ef444420",
-                tension: 0.2,
-                pointRadius: 0,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: false } },
-            plugins: { legend: { position: "top" } },
           },
         };
-        activeCharts["animation"] = new Chart(ctx, chartConfig);
-      }
 
-      // New function for Graphics chart
-      function createGraphicsChart() {
-        const ctx = document.getElementById("graphics-chart").getContext("2d");
-        const labels = Array.from({ length: 21 }, (_, i) => i * 0.5); // x from 0 to 10
-        const curveData = labels.map((x) => -0.1 * x * (x - 10) + 2); // A simple parabolic-like curve
-
-        const chartConfig = {
-          type: "line",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Curva para Cálculo de Área/Volume",
-                data: curveData,
-                borderColor: "#0d9488", // Teal
-                backgroundColor: "rgba(13, 148, 136, 0.2)", // Light teal fill for area
-                tension: 0.3,
-                pointRadius: 2,
-                fill: true, // Fill the area under the curve
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                beginAtZero: true,
-                title: { display: true, text: "Dimensão X" },
-              },
-              y: {
-                beginAtZero: true,
-                title: { display: true, text: "Dimensão Y / Altura" },
-              },
-            },
-            plugins: { legend: { position: "top" } },
-          },
-        };
-        activeCharts["graphics"] = new Chart(ctx, chartConfig);
-      }
-
-      // New function for Probability chart
-      function createProbabilityChart() {
-        const ctx = document
-          .getElementById("probability-chart")
-          .getContext("2d");
-        // Function for a simple Gaussian (Normal) distribution PDF
-        function gaussianPDF(x, mean, stdDev) {
-          return (
-            (1 / (stdDev * Math.sqrt(2 * Math.PI))) *
-            Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2))
-          );
-        }
-
-        const labels = Array.from({ length: 100 }, (_, i) => -5 + i * 0.1); // Range from -5 to 5
-        const mean = 0;
-        const stdDev = 1; // Standard deviation
-
-        const pdfData = labels.map((x) => gaussianPDF(x, mean, stdDev));
-
-        const chartConfig = {
-          type: "line",
-          data: {
-            labels: labels.map((x) => x.toFixed(1)), // Format labels for readability
-            datasets: [
-              {
-                label: "Função de Densidade de Probabilidade (PDF)",
-                data: pdfData,
-                borderColor: "#8b5cf6", // Purple
-                backgroundColor: "rgba(139, 92, 246, 0.2)", // Light purple fill
-                tension: 0.4,
-                pointRadius: 0,
-                fill: true,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                title: { display: true, text: "Valor da Variável Aleatória" },
-              },
-              y: {
-                beginAtZero: true,
-                title: { display: true, text: "Densidade de Probabilidade" },
-              },
-            },
-            plugins: { legend: { position: "top" } },
-          },
-        };
         activeCharts["probability"] = new Chart(ctx, chartConfig);
       }
     </script>
