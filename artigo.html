@@ -7,22 +7,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
+      /* Apple-inspired Design System */
       :root {
-        --bg-primary: #0d1117;
-        --bg-secondary: #161b22;
-        --bg-tertiary: #21262d;
-        --text-primary: #f0f6fc;
-        --text-secondary: #8b949e;
-        --accent-primary: #00ff41;
-        --accent-secondary: #39ff14;
-        --accent-tertiary: #00d92e;
-        --border-color: #30363d;
-        --border-accent: #238636;
-        --shadow-glow: rgba(0, 255, 65, 0.3);
+        --apple-bg: #ffffff;
+        --apple-secondary-bg: #f5f5f7;
+        --apple-tertiary-bg: #fbfbfd;
+        --apple-border: #d2d2d7;
+        --apple-text: #1d1d1f;
+        --apple-text-secondary: #86868b;
+        --apple-accent: #007aff;
+        --apple-accent-hover: #0056cc;
+        --apple-card-bg: #ffffff;
+        --apple-card-border: #e5e5e7;
+        --apple-success: #34c759;
+        --apple-warning: #ff9500;
+        --apple-error: #ff3b30;
+        --apple-shadow: rgba(0, 0, 0, 0.1);
+        --apple-shadow-hover: rgba(0, 0, 0, 0.15);
       }
 
       * {
@@ -32,27 +37,19 @@
       }
 
       body {
-        font-family: "Source Code Pro", "Monaco", "Menlo", "Ubuntu Mono",
-          monospace;
-        background: var(--bg-primary);
-        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+          "Segoe UI", Roboto, sans-serif;
+        background: var(--apple-bg);
+        color: var(--apple-text);
         line-height: 1.6;
         min-height: 100vh;
-        background-image: radial-gradient(
-            circle at 20% 50%,
-            rgba(0, 255, 65, 0.1) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 80% 20%,
-            rgba(57, 255, 20, 0.1) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 40% 80%,
-            rgba(0, 217, 46, 0.1) 0%,
-            transparent 50%
-          );
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(
+          180deg,
+          var(--apple-bg) 0%,
+          var(--apple-secondary-bg) 100%
+        );
       }
 
       .container {
@@ -68,108 +65,75 @@
 
       .back-button {
         display: inline-block;
-        background: linear-gradient(
-          45deg,
-          var(--accent-primary),
-          var(--accent-secondary)
-        );
-        color: var(--bg-primary);
-        padding: 0.75rem 1.5rem;
+        background: var(--apple-accent);
+        color: var(--apple-bg);
+        padding: 12px 24px;
         text-decoration: none;
-        border-radius: 6px;
+        border-radius: 12px;
         font-weight: 600;
         font-size: 0.9rem;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border: none;
         margin-bottom: 2rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        box-shadow: 0 4px 12px var(--apple-shadow);
       }
 
       .back-button:hover {
-        background: var(--bg-secondary);
-        color: var(--accent-primary);
-        border-color: var(--accent-primary);
-        box-shadow: 0 0 20px var(--shadow-glow);
+        background: var(--apple-accent-hover);
         transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--apple-shadow-hover);
       }
 
       .main-title {
         font-size: 3rem;
         font-weight: 700;
-        color: var(--accent-primary);
-        text-shadow: 0 0 20px var(--shadow-glow);
+        color: var(--apple-text);
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+      }
         margin-bottom: 1rem;
         letter-spacing: -1px;
       }
 
       .subtitle {
         font-size: 1.2rem;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 2px;
+        color: var(--apple-text-secondary);
+        margin-bottom: 2rem;
+        font-weight: 400;
       }
 
       .article-container {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
+        background: var(--apple-card-bg);
+        border: 1px solid var(--apple-card-border);
+        border-radius: 20px;
         padding: 3rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 20px var(--apple-shadow);
+        backdrop-filter: blur(20px);
         position: relative;
         overflow: hidden;
-      }
-
-      .article-container::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          var(--accent-primary),
-          transparent
-        );
-        animation: scan 3s ease-in-out infinite;
-      }
-
-      @keyframes scan {
-        0%,
-        100% {
-          opacity: 0;
-        }
-        50% {
-          opacity: 1;
-        }
       }
 
       .article-content h2 {
         font-size: 2rem;
         font-weight: 600;
-        color: var(--accent-primary);
+        color: var(--apple-text);
         margin: 3rem 0 1.5rem 0;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        border-bottom: 2px solid var(--border-accent);
+        letter-spacing: -0.01em;
+        border-bottom: 1px solid var(--apple-border);
         padding-bottom: 0.5rem;
       }
 
       .article-content h3 {
         font-size: 1.5rem;
         font-weight: 500;
-        color: var(--accent-secondary);
+        color: var(--apple-accent);
         margin: 2rem 0 1rem 0;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: -0.005em;
       }
 
       .article-content p {
         margin-bottom: 1.5rem;
-        color: var(--text-primary);
+        color: var(--apple-text);
         line-height: 1.7;
         font-size: 1rem;
       }
@@ -181,14 +145,14 @@
 
       .article-content li {
         margin-bottom: 0.75rem;
-        color: var(--text-primary);
+        color: var(--apple-text);
         list-style: none;
         position: relative;
       }
 
       .article-content li::before {
-        content: "▶";
-        color: var(--accent-primary);
+        content: "•";
+        color: var(--apple-accent);
         font-weight: bold;
         position: absolute;
         left: -1.5rem;
@@ -196,25 +160,25 @@
 
       .article-content strong {
         font-weight: 600;
-        color: var(--accent-secondary);
+        color: var(--apple-accent);
       }
 
       .article-content blockquote {
-        border-left: 4px solid var(--accent-primary);
+        border-left: 4px solid var(--apple-accent);
         padding-left: 1.5rem;
         margin: 2rem 0;
         font-style: italic;
-        color: var(--text-secondary);
-        background: var(--bg-tertiary);
+        color: var(--apple-text-secondary);
+        background: var(--apple-tertiary-bg);
         padding: 1.5rem;
-        border-radius: 0 8px 8px 0;
+        border-radius: 0 12px 12px 0;
         position: relative;
       }
 
       .article-content blockquote::before {
         content: '"';
         font-size: 4rem;
-        color: var(--accent-primary);
+        color: var(--apple-accent);
         position: absolute;
         top: -0.5rem;
         left: 0.5rem;
@@ -222,16 +186,17 @@
       }
 
       .highlight-box {
-        background: var(--bg-tertiary);
-        border: 1px solid var(--border-accent);
-        border-radius: 8px;
+        background: var(--apple-tertiary-bg);
+        border: 1px solid var(--apple-card-border);
+        border-radius: 16px;
         padding: 2rem;
         margin: 2rem 0;
-        border-left: 4px solid var(--accent-primary);
+        border-left: 4px solid var(--apple-accent);
+        box-shadow: 0 2px 12px var(--apple-shadow);
       }
 
       .highlight-box h3 {
-        color: var(--accent-primary);
+        color: var(--apple-accent);
         margin-top: 0;
         margin-bottom: 1rem;
       }
@@ -240,52 +205,44 @@
         text-align: center;
         margin-top: 4rem;
         padding: 2rem 0;
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid var(--apple-border);
       }
 
       .footer p {
-        color: var(--text-secondary);
+        color: var(--apple-text-secondary);
         margin-bottom: 1rem;
       }
 
       .footer-button {
         display: inline-block;
-        background: linear-gradient(
-          45deg,
-          var(--accent-primary),
-          var(--accent-secondary)
-        );
-        color: var(--bg-primary);
-        padding: 1rem 2rem;
+        background: var(--apple-accent);
+        color: var(--apple-bg);
+        padding: 12px 24px;
         text-decoration: none;
-        border-radius: 8px;
+        border-radius: 12px;
         font-weight: 600;
         font-size: 1rem;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border: none;
+        box-shadow: 0 4px 12px var(--apple-shadow);
       }
 
       .footer-button:hover {
-        background: var(--bg-secondary);
-        color: var(--accent-primary);
-        border-color: var(--accent-primary);
-        box-shadow: 0 0 20px var(--shadow-glow);
+        background: var(--apple-accent-hover);
         transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--apple-shadow-hover);
       }
 
       .article-content a {
-        color: var(--accent-primary);
+        color: var(--apple-accent);
         text-decoration: none;
-        border-bottom: 1px solid var(--accent-primary);
-        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
       .article-content a:hover {
-        color: var(--accent-secondary);
-        border-bottom-color: var(--accent-secondary);
-        text-shadow: 0 0 5px var(--shadow-glow);
+        color: var(--apple-accent-hover);
+        border-bottom-color: var(--apple-accent);
       }
 
       /* Mobile responsiveness */
@@ -617,7 +574,7 @@
       <!-- Footer -->
       <footer class="footer">
         <p>
-          © 2024 - Exploração Interativa do Cálculo na Ciência da Computação
+          © 2025 - Exploração Interativa do Cálculo na Ciência da Computação
         </p>
         <div>
           <a href="index.html" class="footer-button">

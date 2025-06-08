@@ -11,45 +11,45 @@
       href="https://fonts.googleapis.com/css2?family=Monaco:wght@400;700&family=Hack:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Tema Hacker GitHub Pages -->
+    <!-- Apple-inspired Theme -->
     <style>
-      /* Base Hacker Theme Colors */
+      /* Apple-inspired Design System */
       :root {
         overflow-y: scroll;
-        --hacker-bg: #0d1117;
-        --hacker-secondary-bg: #161b22;
-        --hacker-border: #21262d;
-        --hacker-text: #00ff41;
-        --hacker-text-secondary: #7d8590;
-        --hacker-accent: #00ff41;
-        --hacker-accent-hover: #00cc33;
-        --hacker-card-bg: #0d1117;
-        --hacker-card-border: #30363d;
+        --apple-bg: #ffffff;
+        --apple-secondary-bg: #f5f5f7;
+        --apple-tertiary-bg: #fbfbfd;
+        --apple-border: #d2d2d7;
+        --apple-text: #1d1d1f;
+        --apple-text-secondary: #86868b;
+        --apple-accent: #007aff;
+        --apple-accent-hover: #0056cc;
+        --apple-card-bg: #ffffff;
+        --apple-card-border: #e5e5e7;
+        --apple-success: #34c759;
+        --apple-warning: #ff9500;
+        --apple-error: #ff3b30;
+        --apple-shadow: rgba(0, 0, 0, 0.1);
+        --apple-shadow-hover: rgba(0, 0, 0, 0.15);
       }
 
       body {
-        font-family: "Monaco", "Hack", "Courier New", monospace;
-        background-color: var(--hacker-bg);
-        color: var(--hacker-text);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+          "Segoe UI", Roboto, sans-serif;
+        background-color: var(--apple-bg);
+        color: var(--apple-text);
         margin: 0;
         padding: 0;
         line-height: 1.6;
-        background-image: radial-gradient(
-            circle at 20% 50%,
-            rgba(0, 255, 65, 0.1) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 80% 20%,
-            rgba(0, 255, 65, 0.1) 0%,
-            transparent 50%
-          ),
-          radial-gradient(
-            circle at 40% 80%,
-            rgba(0, 255, 65, 0.1) 0%,
-            transparent 50%
-          );
-        height: 100%;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: linear-gradient(
+          180deg,
+          var(--apple-bg) 0%,
+          var(--apple-secondary-bg) 100%
+        );
+        min-height: 100vh;
       }
 
       .container {
@@ -61,138 +61,142 @@
       /* Header Styles */
       header {
         text-align: center;
-        margin-bottom: 60px;
-        padding: 40px 20px;
-        border: 2px solid var(--hacker-accent);
-        border-radius: 10px;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 255, 65, 0.1) 0%,
-          rgba(13, 17, 23, 0.9) 100%
-        );
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        margin-bottom: 80px;
+        padding: 60px 40px;
+        background: var(--apple-card-bg);
+        border-radius: 20px;
+        box-shadow: 0 4px 20px var(--apple-shadow);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--apple-card-border);
       }
 
       h1 {
-        font-size: 3rem;
+        font-size: 3.5rem;
+        font-weight: 600;
         margin-bottom: 20px;
-        color: var(--hacker-accent);
-        text-shadow: 0 0 10px var(--hacker-accent);
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+        color: var(--apple-text);
+        letter-spacing: -0.02em;
+        line-height: 1.1;
       }
 
       .subtitle {
-        font-size: 1.2rem;
-        color: var(--hacker-text-secondary);
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--apple-text-secondary);
         max-width: 800px;
-        margin: 0 auto 30px;
-        line-height: 1.8;
+        margin: 0 auto 40px;
+        line-height: 1.5;
       }
 
       /* Botão Artigo */
       .article-btn {
-        display: inline-block;
-        background: linear-gradient(
-          45deg,
-          var(--hacker-accent),
-          var(--hacker-accent-hover)
-        );
-        color: var(--hacker-bg);
-        padding: 15px 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--apple-accent);
+        color: white;
+        padding: 16px 32px;
         text-decoration: none;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 1.1rem;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 1rem;
         transition: all 0.3s ease;
-        border: 2px solid var(--hacker-accent);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+        border: none;
       }
 
       .article-btn:hover {
-        background: var(--hacker-bg);
-        color: var(--hacker-accent);
-        box-shadow: 0 0 25px rgba(0, 255, 65, 0.8);
+        background: var(--apple-accent-hover);
         transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
       }
 
       /* Navigation */
       nav {
         display: flex;
         justify-content: center;
-        gap: 20px;
-        margin-bottom: 40px;
+        gap: 16px;
+        margin-bottom: 60px;
         flex-wrap: wrap;
+        padding: 8px;
+        background: var(--apple-tertiary-bg);
+        border-radius: 16px;
+        box-shadow: 0 2px 8px var(--apple-shadow);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 60px;
       }
 
       .nav-button {
-        background: var(--hacker-secondary-bg);
-        color: var(--hacker-text);
-        border: 2px solid var(--hacker-border);
+        background: transparent;
+        color: var(--apple-text-secondary);
+        border: none;
         padding: 12px 24px;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-family: inherit;
         font-size: 1rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        font-weight: 500;
+        position: relative;
       }
 
-      .nav-button:hover,
+      .nav-button:hover {
+        color: var(--apple-text);
+        background: rgba(0, 122, 255, 0.1);
+      }
+
       .nav-button.active {
-        background: var(--hacker-accent);
-        color: var(--hacker-bg);
-        border-color: var(--hacker-accent);
-        box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
-        transform: translateY(-2px);
+        background: var(--apple-accent);
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
       }
 
       /* Cards */
       .card {
-        background: var(--hacker-card-bg);
-        border: 2px solid var(--hacker-card-border);
-        border-radius: 10px;
-        margin-bottom: 30px;
+        background: var(--apple-card-bg);
+        border: 1px solid var(--apple-card-border);
+        border-radius: 20px;
+        margin-bottom: 24px;
         overflow: hidden;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        position: relative;
+        box-shadow: 0 4px 20px var(--apple-shadow);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
       }
 
       .card:hover {
-        border-color: var(--hacker-accent);
-        box-shadow: 0 8px 30px rgba(0, 255, 65, 0.3);
-        transform: translateY(-5px);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 32px var(--apple-shadow-hover);
+        border-color: var(--apple-accent);
       }
 
       .card::before {
-        content: "Clique para expandir";
+        content: "Toque para expandir";
         position: absolute;
-        top: 5px;
-        right: 15px;
-        font-size: 0.7rem;
-        color: var(--hacker-text-secondary);
+        top: 12px;
+        right: 20px;
+        font-size: 0.75rem;
+        color: var(--apple-text-secondary);
         opacity: 0;
         transition: opacity 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        font-weight: 400;
         pointer-events: none;
       }
 
       .card:hover::before {
-        opacity: 0.8;
+        opacity: 1;
       }
 
       .card-header {
-        padding: 25px;
+        padding: 32px;
         cursor: pointer;
         transition: all 0.3s ease;
-        border-bottom: 1px solid var(--hacker-border);
+        border-bottom: 1px solid var(--apple-border);
         position: relative;
         display: flex;
         align-items: center;
@@ -200,73 +204,50 @@
       }
 
       .card-header:hover {
-        background: rgba(0, 255, 65, 0.05);
+        background: var(--apple-tertiary-bg);
       }
 
       .card-header::after {
-        content: "▼";
-        color: var(--hacker-accent);
-        font-size: 1.2rem;
+        content: "›";
+        color: var(--apple-text-secondary);
+        font-size: 1.5rem;
+        font-weight: 300;
         transition: transform 0.3s ease;
-        margin-left: 15px;
+        margin-left: 16px;
         flex-shrink: 0;
-        animation: pulse 2s infinite;
+        transform: rotate(90deg);
       }
 
       .card-header.expanded::after {
-        transform: rotate(180deg);
-        animation: none;
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 0.7;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1.1);
-        }
+        transform: rotate(270deg);
+        color: var(--apple-accent);
       }
 
       .card-content {
         flex: 1;
       }
 
-      /* Adicionar indicação visual de clicável */
-      .card-header:hover::after {
-        color: var(--hacker-accent-hover);
-        text-shadow: 0 0 5px var(--hacker-accent);
-        animation: none;
-        transform: scale(1.2);
-      }
-
-      .card-header.expanded:hover::after {
-        transform: rotate(180deg) scale(1.2);
-      }
-
       .card-title {
         font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--hacker-accent);
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        font-weight: 600;
+        color: var(--apple-text);
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
       }
 
       .card-summary {
-        color: var(--hacker-text-secondary);
-        line-height: 1.6;
+        color: var(--apple-text-secondary);
+        line-height: 1.5;
+        font-weight: 400;
       }
 
       /* Details Content */
       .details-content {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.7s ease-in-out;
-        background: var(--hacker-secondary-bg);
-        border-top: 1px solid var(--hacker-border);
+        transition: max-height 0.5s ease-in-out;
+        background: var(--apple-secondary-bg);
+        border-top: 1px solid var(--apple-border);
       }
 
       .details-content.open {
@@ -274,108 +255,108 @@
       }
 
       .details-inner {
-        padding: 30px;
+        padding: 32px;
       }
 
       .details-content p {
         margin-bottom: 20px;
-        line-height: 1.7;
-        color: var(--hacker-text-secondary);
+        line-height: 1.6;
+        color: var(--apple-text-secondary);
+        font-weight: 400;
       }
 
       .details-content ul {
         list-style: none;
         padding-left: 0;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .details-content li {
-        padding: 8px 0;
-        padding-left: 20px;
+        padding: 12px 0;
+        padding-left: 24px;
         position: relative;
-        color: var(--hacker-text-secondary);
+        color: var(--apple-text-secondary);
         line-height: 1.6;
       }
 
       .details-content li::before {
-        content: ">";
-        color: var(--hacker-accent);
+        content: "•";
+        color: var(--apple-accent);
         font-weight: bold;
         position: absolute;
-        left: 0;
+        left: 8px;
+        font-size: 1.2rem;
       }
 
       .details-content strong {
-        color: var(--hacker-accent);
-        font-weight: 700;
+        color: var(--apple-text);
+        font-weight: 600;
       }
 
       /* Chart Container */
       .chart-container {
         position: relative;
         width: 100%;
-        max-width: 600px;
-        margin: 30px auto;
-        height: 300px;
-        background: var(--hacker-bg);
-        border: 2px solid var(--hacker-accent);
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        max-width: 700px;
+        margin: 40px auto;
+        height: 350px;
+        background: var(--apple-card-bg);
+        border: 1px solid var(--apple-card-border);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px var(--apple-shadow);
       }
 
       /* Buttons */
       .action-btn {
-        background: var(--hacker-accent);
-        color: var(--hacker-bg);
+        background: var(--apple-accent);
+        color: white;
         border: none;
-        padding: 12px 24px;
-        border-radius: 8px;
+        padding: 14px 28px;
+        border-radius: 12px;
         cursor: pointer;
         font-family: inherit;
-        font-weight: 700;
+        font-weight: 500;
         font-size: 1rem;
         transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
       }
 
       .action-btn:hover {
-        background: var(--hacker-accent-hover);
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+        background: var(--apple-accent-hover);
         transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
       }
 
       /* Sliders */
       .slider-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-top: 32px;
       }
 
       .slider-group {
-        background: var(--hacker-secondary-bg);
-        padding: 20px;
-        border-radius: 8px;
-        border: 1px solid var(--hacker-border);
+        background: var(--apple-card-bg);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--apple-card-border);
+        box-shadow: 0 2px 8px var(--apple-shadow);
       }
 
       .slider-label {
         display: block;
         font-size: 0.9rem;
-        font-weight: 700;
-        color: var(--hacker-accent);
-        margin-bottom: 10px;
-        text-transform: uppercase;
+        font-weight: 500;
+        color: var(--apple-text);
+        margin-bottom: 12px;
       }
 
       .slider {
         width: 100%;
-        height: 6px;
-        border-radius: 3px;
-        background: var(--hacker-border);
+        height: 4px;
+        border-radius: 2px;
+        background: var(--apple-border);
         outline: none;
         appearance: none;
         cursor: pointer;
@@ -386,79 +367,78 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: var(--hacker-accent);
+        background: var(--apple-accent);
         cursor: pointer;
-        box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .slider::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
       }
 
       .slider::-moz-range-thumb {
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: var(--hacker-accent);
+        background: var(--apple-accent);
         cursor: pointer;
         border: none;
-        box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+      }
+
+      .footer p {
+        color: var(--apple-text-secondary);
+        margin-bottom: 1rem;
+        text-align: center;
       }
 
       /* Responsive */
       @media (max-width: 768px) {
         h1 {
-          font-size: 2rem;
+          font-size: 2.5rem;
         }
 
         .container {
-          padding: 15px;
+          padding: 20px;
+        }
+
+        header {
+          padding: 40px 24px;
+          margin-bottom: 60px;
         }
 
         nav {
           flex-direction: column;
-          align-items: center;
+          align-items: stretch;
+          max-width: 400px;
         }
 
         .nav-button {
-          width: 100%;
-          max-width: 300px;
+          text-align: center;
         }
 
         .slider-container {
           grid-template-columns: 1fr;
         }
-      }
 
-      /* Terminal Effect */
-      .terminal-effect {
-        position: relative;
-        overflow: hidden;
-      }
-
-      .terminal-effect::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(0, 255, 65, 0.3),
-          transparent
-        );
-        animation: scan 3s infinite;
-      }
-
-      @keyframes scan {
-        0% {
-          left: -100%;
+        .card-header {
+          padding: 24px;
         }
-        100% {
-          left: 100%;
+
+        .details-inner {
+          padding: 24px;
         }
+      }
+
+      /* Smooth transitions for all elements */
+      * {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
       }
     </style>
   </head>
-  <body class="terminal-effect">
+  <body>
     <div class="container">
       <header>
         <h1>O Cálculo no Coração da Computação</h1>
@@ -483,6 +463,12 @@
       </nav>
 
       <main id="content-area"></main>
+      <!-- Footer -->
+      <footer class="footer">
+        <p>
+          © 2025 - Exploração Interativa do Cálculo na Ciência da Computação
+        </p>
+      </footer>
     </div>
 
     <script>
@@ -791,8 +777,8 @@
               {
                 label: "Sinal com Ruído",
                 data: noisyData,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.1,
                 pointRadius: 0,
               },
@@ -818,8 +804,8 @@
             chart.data.datasets.push({
               label: "Sinal Filtrado (Suavizado)",
               data: filteredData,
-              borderColor: "#00cc33",
-              backgroundColor: "rgba(0, 204, 51, 0.2)",
+              borderColor: "#34c759",
+              backgroundColor: "rgba(52, 199, 89, 0.2)",
               tension: 0.4,
               pointRadius: 0,
             });
@@ -849,16 +835,16 @@
               {
                 label: "Função de Custo",
                 data: costData,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
               },
               {
                 label: "Posição Atual",
                 data: [],
-                borderColor: "#ff0040",
-                backgroundColor: "#ff0040",
+                borderColor: "#ff3b30",
+                backgroundColor: "#ff3b30",
                 pointRadius: 8,
                 showLine: false,
               },
@@ -875,16 +861,16 @@
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#1d1d1f",
                 },
               },
             },
             elements: {
               line: {
-                borderColor: "#00ff41",
+                borderColor: "#007aff",
               },
               point: {
-                backgroundColor: "#00ff41",
+                backgroundColor: "#007aff",
               },
             },
           },
@@ -1026,16 +1012,16 @@
               {
                 label: "Resposta do Sistema",
                 data: simulation.data,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.3,
                 pointRadius: 0,
               },
               {
                 label: "Setpoint (Alvo)",
                 data: Array(simulation.data.length).fill(simulation.setpoint),
-                borderColor: "#ff0040",
-                backgroundColor: "rgba(255, 0, 64, 0.2)",
+                borderColor: "#ff3b30",
+                backgroundColor: "rgba(255, 59, 48, 0.2)",
                 borderDash: [5, 5],
                 pointRadius: 0,
               },
@@ -1047,17 +1033,21 @@
             scales: {
               y: {
                 beginAtZero: false,
-                title: { display: true, text: "Valor", color: "#00ff41" },
+                title: { display: true, text: "Valor", color: "#1d1d1f" },
+                grid: { color: "rgba(29, 29, 31, 0.1)" },
+                ticks: { color: "#1d1d1f" },
               },
               x: {
-                title: { display: true, text: "Tempo (s)", color: "#00ff41" },
+                title: { display: true, text: "Tempo (s)", color: "#1d1d1f" },
+                grid: { color: "rgba(29, 29, 31, 0.1)" },
+                ticks: { color: "#1d1d1f" },
               },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
@@ -1088,23 +1078,23 @@
               {
                 label: "Posição",
                 data: position,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
               },
               {
                 label: "Velocidade (1ª Derivada)",
                 data: velocity,
-                borderColor: "#00cc33",
-                backgroundColor: "rgba(0, 204, 51, 0.2)",
+                borderColor: "#34c759",
+                backgroundColor: "rgba(52, 199, 89, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
               },
               {
                 label: "Aceleração (2ª Derivada)",
                 data: acceleration,
-                borderColor: "#ff0040",
+                borderColor: "#ff3b30",
                 backgroundColor: "rgba(255, 0, 64, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
@@ -1115,16 +1105,16 @@
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-              y: { title: { display: true, text: "Valor", color: "#00ff41" } },
+              y: { title: { display: true, text: "Valor", color: "#007aff" } },
               x: {
-                title: { display: true, text: "Tempo (s)", color: "#00ff41" },
+                title: { display: true, text: "Tempo (s)", color: "#007aff" },
               },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
@@ -1154,11 +1144,11 @@
               {
                 label: "Convergência da Iluminação (Monte Carlo)",
                 data: lightIntensity,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.3,
                 pointRadius: 2,
-                pointBackgroundColor: "#00ff41",
+                pointBackgroundColor: "#007aff",
               },
             ],
           },
@@ -1170,7 +1160,7 @@
                 title: {
                   display: true,
                   text: "Intensidade da Luz",
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
                 beginAtZero: true,
               },
@@ -1178,7 +1168,7 @@
                 title: {
                   display: true,
                   text: "Número de Amostras Ray Tracing",
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
@@ -1186,7 +1176,7 @@
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
@@ -1213,23 +1203,23 @@
               {
                 label: "Posição",
                 data: position,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
               },
               {
                 label: "Velocidade (1ª Derivada)",
                 data: velocity,
-                borderColor: "#00cc33",
-                backgroundColor: "rgba(0, 204, 51, 0.2)",
+                borderColor: "#34c759",
+                backgroundColor: "rgba(52, 199, 89, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
               },
               {
                 label: "Aceleração (2ª Derivada)",
                 data: acceleration,
-                borderColor: "#ff0040",
+                borderColor: "#ff3b30",
                 backgroundColor: "rgba(255, 0, 64, 0.2)",
                 tension: 0.4,
                 pointRadius: 0,
@@ -1241,21 +1231,21 @@
             maintainAspectRatio: false,
             scales: {
               y: {
-                title: { display: true, text: "Valor", color: "#00ff41" },
-                grid: { color: "rgba(0, 255, 65, 0.1)" },
-                ticks: { color: "#00ff41" },
+                title: { display: true, text: "Valor", color: "#007aff" },
+                grid: { color: "rgba(0, 122, 255, 0.1)" },
+                ticks: { color: "#007aff" },
               },
               x: {
-                title: { display: true, text: "Tempo (s)", color: "#00ff41" },
-                grid: { color: "rgba(0, 255, 65, 0.1)" },
-                ticks: { color: "#00ff41" },
+                title: { display: true, text: "Tempo (s)", color: "#007aff" },
+                grid: { color: "rgba(0, 122, 255, 0.1)" },
+                ticks: { color: "#007aff" },
               },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
@@ -1285,11 +1275,11 @@
               {
                 label: "Convergência da Iluminação (Monte Carlo)",
                 data: lightIntensity,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.2)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.2)",
                 tension: 0.3,
                 pointRadius: 2,
-                pointBackgroundColor: "#00ff41",
+                pointBackgroundColor: "#007aff",
                 fill: true,
               },
             ],
@@ -1302,27 +1292,27 @@
                 title: {
                   display: true,
                   text: "Intensidade da Luz",
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
                 beginAtZero: true,
-                grid: { color: "rgba(0, 255, 65, 0.1)" },
-                ticks: { color: "#00ff41" },
+                grid: { color: "rgba(0, 122, 255, 0.1)" },
+                ticks: { color: "#007aff" },
               },
               x: {
                 title: {
                   display: true,
                   text: "Número de Amostras Ray Tracing",
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
-                grid: { color: "rgba(0, 255, 65, 0.1)" },
-                ticks: { color: "#00ff41" },
+                grid: { color: "rgba(0, 122, 255, 0.1)" },
+                ticks: { color: "#007aff" },
               },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
@@ -1354,8 +1344,8 @@
               {
                 label: "Função de Densidade de Probabilidade (PDF)",
                 data: pdf,
-                borderColor: "#00ff41",
-                backgroundColor: "rgba(0, 255, 65, 0.3)",
+                borderColor: "#007aff",
+                backgroundColor: "rgba(0, 122, 255, 0.3)",
                 fill: true,
                 tension: 0.4,
                 pointRadius: 0,
@@ -1370,27 +1360,27 @@
                 title: {
                   display: true,
                   text: "Densidade de Probabilidade",
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
                 beginAtZero: true,
-                grid: { color: "rgba(0, 255, 65, 0.1)" },
-                ticks: { color: "#00ff41" },
+                grid: { color: "rgba(0, 122, 255, 0.1)" },
+                ticks: { color: "#007aff" },
               },
               x: {
                 title: {
                   display: true,
                   text: "Valor da Variável Aleatória",
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
-                grid: { color: "rgba(0, 255, 65, 0.1)" },
-                ticks: { color: "#00ff41" },
+                grid: { color: "rgba(0, 122, 255, 0.1)" },
+                ticks: { color: "#007aff" },
               },
             },
             plugins: {
               legend: {
                 position: "top",
                 labels: {
-                  color: "#00ff41",
+                  color: "#007aff",
                 },
               },
             },
