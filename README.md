@@ -24,11 +24,13 @@ Este projeto oferece uma experiência interativa para entender como conceitos fu
 ### 🧮 Temas Abordados
 
 #### Aplicações de Integrais
+
 - **Processamento de Sinais e Imagens**: Filtragem, Transformadas de Fourier, Convolução
 - **Probabilidade e IA**: PDFs, Valor Esperado, Tomada de Decisão
 - **Computação Gráfica**: Ray Tracing, Renderização, Simulações
 
 #### Aplicações de Derivadas
+
 - **Inteligência Artificial**: Descida do Gradiente, Backpropagation, Otimização
 - **Robótica**: Controladores PID, Sistemas de Controle
 - **Animação e Física**: Simulação de Movimento, Detecção de Bordas
@@ -61,6 +63,7 @@ Este projeto oferece uma experiência interativa para entender como conceitos fu
 ### Passo 2: Personalizar a Configuração
 
 Edite o arquivo `_config.yml` e substitua:
+
 - `USERNAME` pelo seu nome de usuário do GitHub
 - `REPOSITORY_NAME` pelo nome do seu repositório
 - `Seu Nome` pelo seu nome real
@@ -74,13 +77,16 @@ Edite o arquivo `_config.yml` e substitua:
 ## 🎨 Personalização
 
 ### Cores e Tema
+
 O projeto usa uma paleta baseada em tons de teal. Para personalizar:
+
 - Modifique as classes Tailwind nos arquivos HTML
 - Ajuste as variáveis CSS no `<style>` do cabeçalho
 
 ### Conteúdo
+
 - **Textos**: Edite os objetos `contentData` no JavaScript
-- **Gráficos**: Modifique as funções `createXXXChart()` 
+- **Gráficos**: Modifique as funções `createXXXChart()`
 - **Artigo**: Edite diretamente o HTML em `artigo.html`
 
 ## 🤝 Contribuições
@@ -104,6 +110,3 @@ Para dúvidas, sugestões ou feedback, abra uma issue no repositório.
 ---
 
 **Desenvolvido com 💙 para democratizar o conhecimento matemático na era digital.**
-
-
-

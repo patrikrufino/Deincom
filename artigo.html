@@ -1,172 +1,630 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artigo na Íntegra - Cálculo na Ciência da Computação</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .article-content h2 { @apply text-2xl font-bold text-teal-700 mt-8 mb-4; }
-        .article-content h3 { @apply text-xl font-semibold text-teal-600 mt-6 mb-3; }
-        .article-content p { @apply mb-4 text-slate-700 leading-relaxed; }
-        .article-content ul { @apply mb-4 pl-6; }
-        .article-content li { @apply mb-2 text-slate-700 list-disc; }
-        .article-content strong { @apply font-semibold text-slate-800; }
-        .article-content blockquote { @apply border-l-4 border-teal-500 pl-4 italic text-slate-600 my-6; }
+      :root {
+        --bg-primary: #0d1117;
+        --bg-secondary: #161b22;
+        --bg-tertiary: #21262d;
+        --text-primary: #f0f6fc;
+        --text-secondary: #8b949e;
+        --accent-primary: #00ff41;
+        --accent-secondary: #39ff14;
+        --accent-tertiary: #00d92e;
+        --border-color: #30363d;
+        --border-accent: #238636;
+        --shadow-glow: rgba(0, 255, 65, 0.3);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Source Code Pro", "Monaco", "Menlo", "Ubuntu Mono",
+          monospace;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        background-image: radial-gradient(
+            circle at 20% 50%,
+            rgba(0, 255, 65, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(57, 255, 20, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 80%,
+            rgba(0, 217, 46, 0.1) 0%,
+            transparent 50%
+          );
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .back-button {
+        display: inline-block;
+        background: linear-gradient(
+          45deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
+        color: var(--bg-primary);
+        padding: 0.75rem 1.5rem;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .back-button:hover {
+        background: var(--bg-secondary);
+        color: var(--accent-primary);
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 20px var(--shadow-glow);
+        transform: translateY(-2px);
+      }
+
+      .main-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        text-shadow: 0 0 20px var(--shadow-glow);
+        margin-bottom: 1rem;
+        letter-spacing: -1px;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .article-container {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 3rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .article-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent-primary),
+          transparent
+        );
+        animation: scan 3s ease-in-out infinite;
+      }
+
+      @keyframes scan {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .article-content h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--accent-primary);
+        margin: 3rem 0 1.5rem 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid var(--border-accent);
+        padding-bottom: 0.5rem;
+      }
+
+      .article-content h3 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--accent-secondary);
+        margin: 2rem 0 1rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .article-content p {
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+        line-height: 1.7;
+        font-size: 1rem;
+      }
+
+      .article-content ul {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+      }
+
+      .article-content li {
+        margin-bottom: 0.75rem;
+        color: var(--text-primary);
+        list-style: none;
+        position: relative;
+      }
+
+      .article-content li::before {
+        content: "▶";
+        color: var(--accent-primary);
+        font-weight: bold;
+        position: absolute;
+        left: -1.5rem;
+      }
+
+      .article-content strong {
+        font-weight: 600;
+        color: var(--accent-secondary);
+      }
+
+      .article-content blockquote {
+        border-left: 4px solid var(--accent-primary);
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        color: var(--text-secondary);
+        background: var(--bg-tertiary);
+        padding: 1.5rem;
+        border-radius: 0 8px 8px 0;
+        position: relative;
+      }
+
+      .article-content blockquote::before {
+        content: '"';
+        font-size: 4rem;
+        color: var(--accent-primary);
+        position: absolute;
+        top: -0.5rem;
+        left: 0.5rem;
+        opacity: 0.3;
+      }
+
+      .highlight-box {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-accent);
+        border-radius: 8px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-left: 4px solid var(--accent-primary);
+      }
+
+      .highlight-box h3 {
+        color: var(--accent-primary);
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 4rem;
+        padding: 2rem 0;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .footer p {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+
+      .footer-button {
+        display: inline-block;
+        background: linear-gradient(
+          45deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
+        color: var(--bg-primary);
+        padding: 1rem 2rem;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .footer-button:hover {
+        background: var(--bg-secondary);
+        color: var(--accent-primary);
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 20px var(--shadow-glow);
+        transform: translateY(-2px);
+      }
+
+      .article-content a {
+        color: var(--accent-primary);
+        text-decoration: none;
+        border-bottom: 1px solid var(--accent-primary);
+        transition: all 0.3s ease;
+      }
+
+      .article-content a:hover {
+        color: var(--accent-secondary);
+        border-bottom-color: var(--accent-secondary);
+        text-shadow: 0 0 5px var(--shadow-glow);
+      }
+
+      /* Mobile responsiveness */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .main-title {
+          font-size: 2rem;
+        }
+
+        .article-container {
+          padding: 1.5rem;
+        }
+
+        .article-content h2 {
+          font-size: 1.5rem;
+        }
+
+        .article-content h3 {
+          font-size: 1.2rem;
+        }
+      }
     </style>
-</head>
-<body class="bg-slate-50 text-slate-800">
-    
-    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
-        
-        <!-- Header com botão de volta -->
-        <header class="text-center mb-10">
-            <div class="mb-4">
-                <a href="index.html" class="inline-block bg-teal-600 text-white py-2 px-4 rounded-lg shadow hover:bg-teal-700 transition-colors duration-300">
-                    ← Voltar à Exploração Interativa
-                </a>
-            </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-teal-700 mb-2">O Cálculo no Coração da Computação</h1>
-            <p class="text-lg text-slate-600">Artigo Completo</p>
-        </header>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header com botão de volta -->
+      <header class="header">
+        <div>
+          <a href="index.html" class="back-button">
+            ← Voltar à Exploração Interativa
+          </a>
+        </div>
+        <h1 class="main-title">O Cálculo no Coração da Computação</h1>
+        <p class="subtitle">Artigo Completo</p>
+      </header>
 
-        <!-- Conteúdo do artigo -->
-        <article class="article-content bg-white rounded-xl shadow-lg p-8 md:p-12">
-            
-            <h2>Introdução</h2>
-            <p>O cálculo diferencial e integral, desenvolvido independentemente por Isaac Newton e Gottfried Leibniz no século XVII, revolucionou não apenas a matemática, mas também se tornou a espinha dorsal de praticamente toda a tecnologia moderna que conhecemos hoje. Desde o algoritmo que recomenda vídeos no YouTube até o sistema de navegação autônoma de um Tesla, as derivadas e integrais estão silenciosamente operando nos bastidores, tornando possível a era digital em que vivemos.</p>
+      <!-- Conteúdo do artigo -->
+      <article class="article-container">
+        <div class="article-content">
+          <h2>Introdução</h2>
+          <p>
+            O cálculo diferencial e integral, desenvolvido independentemente por
+            Isaac Newton e Gottfried Leibniz no século XVII, revolucionou não
+            apenas a matemática, mas também se tornou a espinha dorsal de
+            praticamente toda a tecnologia moderna que conhecemos hoje. Desde o
+            algoritmo que recomenda vídeos no YouTube até o sistema de navegação
+            autônoma de um Tesla, as derivadas e integrais estão silenciosamente
+            operando nos bastidores, tornando possível a era digital em que
+            vivemos.
+          </p>
 
-            <p>Este artigo explora como os conceitos fundamentais do cálculo – a taxa de variação instantânea (derivadas) e a acumulação contínua (integrais) – são aplicados na ciência da computação moderna, revelando a beleza matemática por trás da tecnologia que usamos diariamente.</p>
+          <p>
+            Este artigo explora como os conceitos fundamentais do cálculo – a
+            taxa de variação instantânea (derivadas) e a acumulação contínua
+            (integrais) – são aplicados na ciência da computação moderna,
+            revelando a beleza matemática por trás da tecnologia que usamos
+            diariamente.
+          </p>
 
-            <h2>Derivadas: O Motor da Otimização Digital</h2>
+          <h2>Derivadas: O Motor da Otimização Digital</h2>
 
-            <h3>Inteligência Artificial e Machine Learning</h3>
-            <p>A revolução da inteligência artificial que presenciamos hoje seria impossível sem as derivadas. O processo de "aprendizado" de uma máquina é, na verdade, um problema de otimização matemática onde o objetivo é minimizar uma função de erro ou custo.</p>
+          <h3>Inteligência Artificial e Machine Learning</h3>
+          <p>
+            A revolução da inteligência artificial que presenciamos hoje seria
+            impossível sem as derivadas. O processo de "aprendizado" de uma
+            máquina é, na verdade, um problema de otimização matemática onde o
+            objetivo é minimizar uma função de erro ou custo.
+          </p>
 
-            <p><strong>Descida do Gradiente:</strong> O algoritmo fundamental por trás do treinamento de redes neurais. Imagine uma paisagem montanhosa onde você está perdido no topo de uma montanha e precisa encontrar o vale mais baixo. A descida do gradiente funciona exatamente assim: calcula a inclinação (derivada) da superfície em sua posição atual e dá um passo na direção de maior declive. Repetindo esse processo iterativamente, o algoritmo encontra o ponto de erro mínimo.</p>
+          <p>
+            <strong>Descida do Gradiente:</strong> O algoritmo fundamental por
+            trás do treinamento de redes neurais. Imagine uma paisagem
+            montanhosa onde você está perdido no topo de uma montanha e precisa
+            encontrar o vale mais baixo. A descida do gradiente funciona
+            exatamente assim: calcula a inclinação (derivada) da superfície em
+            sua posição atual e dá um passo na direção de maior declive.
+            Repetindo esse processo iterativamente, o algoritmo encontra o ponto
+            de erro mínimo.
+          </p>
 
-            <blockquote>
-                "Cada vez que você usa o reconhecimento facial do seu smartphone, milhares de derivadas são calculadas para ajustar os pesos da rede neural e melhorar a precisão do reconhecimento."
-            </blockquote>
+          <blockquote>
+            "Cada vez que você usa o reconhecimento facial do seu smartphone,
+            milhares de derivadas são calculadas para ajustar os pesos da rede
+            neural e melhorar a precisão do reconhecimento."
+          </blockquote>
 
-            <p><strong>Backpropagation:</strong> Em redes neurais profundas com milhões de parâmetros, calcular as derivadas de cada peso seria computacionalmente proibitivo. A regra da cadeia do cálculo permite que o erro seja propagado "para trás" através da rede, calculando eficientemente todas as derivadas necessárias em uma única passagem.</p>
+          <p>
+            <strong>Backpropagation:</strong> Em redes neurais profundas com
+            milhões de parâmetros, calcular as derivadas de cada peso seria
+            computacionalmente proibitivo. A regra da cadeia do cálculo permite
+            que o erro seja propagado "para trás" através da rede, calculando
+            eficientemente todas as derivadas necessárias em uma única passagem.
+          </p>
 
-            <h3>Robótica e Sistemas de Controle</h3>
-            <p>Os controladores PID (Proporcional-Integral-Derivativo) são ubíquos na robótica moderna, desde drones até braços robóticos industriais. Cada componente tem uma função matemática específica:</p>
+          <h3>Robótica e Sistemas de Controle</h3>
+          <p>
+            Os controladores PID (Proporcional-Integral-Derivativo) são ubíquos
+            na robótica moderna, desde drones até braços robóticos industriais.
+            Cada componente tem uma função matemática específica:
+          </p>
 
-            <ul>
-                <li><strong>Proporcional (P):</strong> Reage proporcionalmente ao erro atual</li>
-                <li><strong>Integral (I):</strong> Elimina erros sistemáticos acumulando erros passados</li>
-                <li><strong>Derivativo (D):</strong> Antecipa erros futuros calculando a taxa de variação do erro (derivada)</li>
-            </ul>
+          <ul>
+            <li>
+              <strong>Proporcional (P):</strong> Reage proporcionalmente ao erro
+              atual
+            </li>
+            <li>
+              <strong>Integral (I):</strong> Elimina erros sistemáticos
+              acumulando erros passados
+            </li>
+            <li>
+              <strong>Derivativo (D):</strong> Antecipa erros futuros calculando
+              a taxa de variação do erro (derivada)
+            </li>
+          </ul>
 
-            <p>O termo derivativo é crucial para a estabilidade do sistema. Sem ele, um robô tentando alcançar uma posição específica poderia oscilar indefinidamente ao redor do target, como um pêndulo que nunca para.</p>
+          <p>
+            O termo derivativo é crucial para a estabilidade do sistema. Sem
+            ele, um robô tentando alcançar uma posição específica poderia
+            oscilar indefinidamente ao redor do target, como um pêndulo que
+            nunca para.
+          </p>
 
-            <h3>Computação Gráfica e Simulação Física</h3>
-            <p>Em motores de jogos modernos como Unreal Engine ou Unity, as derivadas são fundamentais para:</p>
+          <h3>Computação Gráfica e Simulação Física</h3>
+          <p>
+            Em motores de jogos modernos como Unreal Engine ou Unity, as
+            derivadas são fundamentais para:
+          </p>
 
-            <ul>
-                <li><strong>Simulação de Física:</strong> Velocidade é a derivada da posição; aceleração é a derivada da velocidade. Isso permite simular gravidade, colisões e movimentos realistas.</li>
-                <li><strong>Iluminação Realística:</strong> O cálculo de normais de superfície (vetores perpendiculares) requer derivadas parciais da função que descreve a geometria 3D.</li>
-                <li><strong>Detecção de Bordas:</strong> Filtros como Sobel usam derivadas discretas para identificar mudanças bruscas de cor/intensidade em imagens.</li>
-            </ul>
+          <ul>
+            <li>
+              <strong>Simulação de Física:</strong> Velocidade é a derivada da
+              posição; aceleração é a derivada da velocidade. Isso permite
+              simular gravidade, colisões e movimentos realistas.
+            </li>
+            <li>
+              <strong>Iluminação Realística:</strong> O cálculo de normais de
+              superfície (vetores perpendiculares) requer derivadas parciais da
+              função que descreve a geometria 3D.
+            </li>
+            <li>
+              <strong>Detecção de Bordas:</strong> Filtros como Sobel usam
+              derivadas discretas para identificar mudanças bruscas de
+              cor/intensidade em imagens.
+            </li>
+          </ul>
 
-            <h2>Integrais: A Arte da Acumulação Digital</h2>
+          <h2>Integrais: A Arte da Acumulação Digital</h2>
 
-            <h3>Processamento de Sinais e Imagens</h3>
-            <p>No mundo digital, raramente lidamos com integrais "puras" – em vez disso, trabalhamos com suas aproximações discretas. Mas os princípios permanecem os mesmos.</p>
+          <h3>Processamento de Sinais e Imagens</h3>
+          <p>
+            No mundo digital, raramente lidamos com integrais "puras" – em vez
+            disso, trabalhamos com suas aproximações discretas. Mas os
+            princípios permanecem os mesmos.
+          </p>
 
-            <p><strong>Filtragem de Sinais:</strong> Um filtro de média móvel, usado para suavizar dados ruidosos de sensores ou áudio, é essencialmente uma aproximação discreta de uma integral. Ele "acumula" valores ao longo de uma janela temporal para extrair a tendência subjacente.</p>
+          <p>
+            <strong>Filtragem de Sinais:</strong> Um filtro de média móvel,
+            usado para suavizar dados ruidosos de sensores ou áudio, é
+            essencialmente uma aproximação discreta de uma integral. Ele
+            "acumula" valores ao longo de uma janela temporal para extrair a
+            tendência subjacente.
+          </p>
 
-            <p><strong>Transformadas de Fourier:</strong> Definidas por integrais, essas transformadas são fundamentais para:</p>
-            <ul>
-                <li>Compressão de áudio (MP3) e imagem (JPEG)</li>
-                <li>Reconhecimento de voz e processamento de linguagem natural</li>
-                <li>Análise de frequências em telecomunicações</li>
-            </ul>
+          <p>
+            <strong>Transformadas de Fourier:</strong> Definidas por integrais,
+            essas transformadas são fundamentais para:
+          </p>
+          <ul>
+            <li>Compressão de áudio (MP3) e imagem (JPEG)</li>
+            <li>Reconhecimento de voz e processamento de linguagem natural</li>
+            <li>Análise de frequências em telecomunicações</li>
+          </ul>
 
-            <p><strong>Convolução:</strong> Em redes neurais convolucionais (CNNs), usadas em visão computacional, a operação de convolução é matematicamente uma integral. Ela aplica filtros para detectar características como bordas, texturas e padrões em imagens.</p>
+          <p>
+            <strong>Convolução:</strong> Em redes neurais convolucionais (CNNs),
+            usadas em visão computacional, a operação de convolução é
+            matematicamente uma integral. Ela aplica filtros para detectar
+            características como bordas, texturas e padrões em imagens.
+          </p>
 
-            <h3>Probabilidade e Tomada de Decisão em IA</h3>
-            <p>A incerteza é inerente ao mundo real, e a IA precisa quantificá-la para tomar decisões inteligentes.</p>
+          <h3>Probabilidade e Tomada de Decisão em IA</h3>
+          <p>
+            A incerteza é inerente ao mundo real, e a IA precisa quantificá-la
+            para tomar decisões inteligentes.
+          </p>
 
-            <p><strong>Funções de Densidade de Probabilidade (PDFs):</strong> A probabilidade de uma variável contínua (como a temperatura, velocidade do vento, ou preço de uma ação) estar em um determinado intervalo é calculada como a área sob a curva da PDF – uma integral definida.</p>
+          <p>
+            <strong>Funções de Densidade de Probabilidade (PDFs):</strong> A
+            probabilidade de uma variável contínua (como a temperatura,
+            velocidade do vento, ou preço de uma ação) estar em um determinado
+            intervalo é calculada como a área sob a curva da PDF – uma integral
+            definida.
+          </p>
 
-            <p><strong>Valor Esperado:</strong> Para variáveis contínuas, o valor esperado é calculado através de uma integral. Isso é crucial em:</p>
-            <ul>
-                <li>Algoritmos de trading quantitativo</li>
-                <li>Sistemas de recomendação que avaliam o "valor esperado" de sugerir um produto</li>
-                <li>Carros autônomos que calculam o risco esperado de diferentes trajetórias</li>
-            </ul>
+          <p>
+            <strong>Valor Esperado:</strong> Para variáveis contínuas, o valor
+            esperado é calculado através de uma integral. Isso é crucial em:
+          </p>
+          <ul>
+            <li>Algoritmos de trading quantitativo</li>
+            <li>
+              Sistemas de recomendação que avaliam o "valor esperado" de sugerir
+              um produto
+            </li>
+            <li>
+              Carros autônomos que calculam o risco esperado de diferentes
+              trajetórias
+            </li>
+          </ul>
 
-            <h3>Computação Gráfica: Ray Tracing e Renderização</h3>
-            <p>A criação de imagens fotorrealistas em filmes de animação e jogos AAA depende pesadamente de integrais.</p>
+          <h3>Computação Gráfica: Ray Tracing e Renderização</h3>
+          <p>
+            A criação de imagens fotorrealistas em filmes de animação e jogos
+            AAA depende pesadamente de integrais.
+          </p>
 
-            <p><strong>Equação de Renderização:</strong> Esta equação integral complexa descreve como a luz se comporta em uma cena 3D. Para cada pixel na tela, o computador deve resolver uma integral que considera:</p>
-            <ul>
-                <li>Luz direta de fontes luminosas</li>
-                <li>Luz indireta refletida por outras superfícies</li>
-                <li>Absorção e espalhamento de luz por materiais</li>
-            </ul>
+          <p>
+            <strong>Equação de Renderização:</strong> Esta equação integral
+            complexa descreve como a luz se comporta em uma cena 3D. Para cada
+            pixel na tela, o computador deve resolver uma integral que
+            considera:
+          </p>
+          <ul>
+            <li>Luz direta de fontes luminosas</li>
+            <li>Luz indireta refletida por outras superfícies</li>
+            <li>Absorção e espalhamento de luz por materiais</li>
+          </ul>
 
-            <p><strong>Métodos Monte Carlo:</strong> Como essas integrais são impossíveis de resolver analiticamente, técnicas de integração numérica como Monte Carlo são usadas. Elas "amostragem" milhares de caminhos de luz aleatórios para aproximar a solução, criando os efeitos visuais realistas que vemos na tela.</p>
+          <p>
+            <strong>Métodos Monte Carlo:</strong> Como essas integrais são
+            impossíveis de resolver analiticamente, técnicas de integração
+            numérica como Monte Carlo são usadas. Elas "amostragem" milhares de
+            caminhos de luz aleatórios para aproximar a solução, criando os
+            efeitos visuais realistas que vemos na tela.
+          </p>
 
-            <h2>Casos de Estudo: Tecnologias do Cotidiano</h2>
+          <h2>Casos de Estudo: Tecnologias do Cotidiano</h2>
 
-            <h3>Sistema de Recomendação do Netflix</h3>
-            <p>O algoritmo que decide qual filme sugerir usa:</p>
-            <ul>
-                <li><strong>Derivadas:</strong> Para otimizar a função de recomendação através de descida do gradiente</li>
-                <li><strong>Integrais:</strong> Para calcular a "utilidade esperada" de recomendar cada filme baseado no histórico do usuário</li>
-            </ul>
+          <h3>Sistema de Recomendação do Netflix</h3>
+          <p>O algoritmo que decide qual filme sugerir usa:</p>
+          <ul>
+            <li>
+              <strong>Derivadas:</strong> Para otimizar a função de recomendação
+              através de descida do gradiente
+            </li>
+            <li>
+              <strong>Integrais:</strong> Para calcular a "utilidade esperada"
+              de recomendar cada filme baseado no histórico do usuário
+            </li>
+          </ul>
 
-            <h3>GPS e Navegação</h3>
-            <p>Seu aplicativo de GPS usa:</p>
-            <ul>
-                <li><strong>Derivadas:</strong> Para calcular velocidade e aceleração instantâneas</li>
-                <li><strong>Integrais:</strong> Para determinar a distância total percorrida e estimar tempo de chegada</li>
-            </ul>
+          <h3>GPS e Navegação</h3>
+          <p>Seu aplicativo de GPS usa:</p>
+          <ul>
+            <li>
+              <strong>Derivadas:</strong> Para calcular velocidade e aceleração
+              instantâneas
+            </li>
+            <li>
+              <strong>Integrais:</strong> Para determinar a distância total
+              percorrida e estimar tempo de chegada
+            </li>
+          </ul>
 
-            <h3>Reconhecimento de Voz (Siri, Alexa, Google Assistant)</h3>
-            <p>O processamento de sua voz envolve:</p>
-            <ul>
-                <li><strong>Integrais (Transformada de Fourier):</strong> Para converter o sinal de áudio no domínio do tempo para o domínio da frequência</li>
-                <li><strong>Derivadas:</strong> Para treinar as redes neurais que reconhecem padrões na fala</li>
-            </ul>
+          <h3>Reconhecimento de Voz (Siri, Alexa, Google Assistant)</h3>
+          <p>O processamento de sua voz envolve:</p>
+          <ul>
+            <li>
+              <strong>Integrais (Transformada de Fourier):</strong> Para
+              converter o sinal de áudio no domínio do tempo para o domínio da
+              frequência
+            </li>
+            <li>
+              <strong>Derivadas:</strong> Para treinar as redes neurais que
+              reconhecem padrões na fala
+            </li>
+          </ul>
 
-            <h2>O Futuro: Cálculo e Computação Quântica</h2>
-            <p>À medida que avançamos para a era da computação quântica, o cálculo continua sendo fundamental. A equação de Schrödinger, que governa o comportamento de sistemas quânticos, é uma equação diferencial parcial. Algoritmos quânticos para otimização e machine learning ainda dependem de conceitos de derivadas e integrais, mas agora aplicados em espaços de Hilbert de alta dimensão.</p>
+          <h2>O Futuro: Cálculo e Computação Quântica</h2>
+          <p>
+            À medida que avançamos para a era da computação quântica, o cálculo
+            continua sendo fundamental. A equação de Schrödinger, que governa o
+            comportamento de sistemas quânticos, é uma equação diferencial
+            parcial. Algoritmos quânticos para otimização e machine learning
+            ainda dependem de conceitos de derivadas e integrais, mas agora
+            aplicados em espaços de Hilbert de alta dimensão.
+          </p>
 
-            <h2>Conclusão</h2>
-            <p>O cálculo não é apenas uma disciplina acadêmica abstrata – ele é a linguagem matemática que permite que os computadores "vejam", "ouçam", "aprendam" e "decidam". Cada vez que você desbloqueou seu telefone com reconhecimento facial, pediu direções ao GPS, ou assistiu a um filme recomendado por um algoritmo, você experimentou o poder do cálculo diferencial e integral em ação.</p>
+          <h2>Conclusão</h2>
+          <p>
+            O cálculo não é apenas uma disciplina acadêmica abstrata – ele é a
+            linguagem matemática que permite que os computadores "vejam",
+            "ouçam", "aprendam" e "decidam". Cada vez que você desbloqueou seu
+            telefone com reconhecimento facial, pediu direções ao GPS, ou
+            assistiu a um filme recomendado por um algoritmo, você experimentou
+            o poder do cálculo diferencial e integral em ação.
+          </p>
 
-            <p>Compreender essas conexões não apenas enriquece nossa apreciação da matemática, mas também nos prepara para participar mais efetivamente na criação das tecnologias do futuro. Em um mundo cada vez mais digital, o cálculo continua sendo uma ferramenta indispensável para transformar problemas complexos do mundo real em soluções computacionais elegantes.</p>
+          <p>
+            Compreender essas conexões não apenas enriquece nossa apreciação da
+            matemática, mas também nos prepara para participar mais efetivamente
+            na criação das tecnologias do futuro. Em um mundo cada vez mais
+            digital, o cálculo continua sendo uma ferramenta indispensável para
+            transformar problemas complexos do mundo real em soluções
+            computacionais elegantes.
+          </p>
 
-            <blockquote>
-                "O cálculo é a linguagem em que Deus escreveu o universo... e a linguagem em que os programadores escrevem o futuro." - Adaptação da famosa frase de Galileu Galilei
-            </blockquote>
+          <blockquote>
+            "O cálculo é a linguagem em que Deus escreveu o universo... e a
+            linguagem em que os programadores escrevem o futuro." - Adaptação da
+            famosa frase de Galileu Galilei
+          </blockquote>
 
-            <div class="mt-8 p-6 bg-teal-50 rounded-lg border-l-4 border-teal-500">
-                <h3 class="text-lg font-semibold text-teal-700 mb-2">Para Explorar Mais</h3>
-                <p class="text-slate-700">Volte à <a href="index.html" class="text-teal-600 hover:text-teal-800 underline">exploração interativa</a> para experimentar hands-on como as derivadas e integrais funcionam na prática através de visualizações e simulações.</p>
-            </div>
-        </article>
+          <div class="highlight-box">
+            <h3>Para Explorar Mais</h3>
+            <p>
+              Volte à <a href="index.html">exploração interativa</a> para
+              experimentar hands-on como as derivadas e integrais funcionam na
+              prática através de visualizações e simulações.
+            </p>
+          </div>
+        </div>
+      </article>
 
-        <!-- Footer -->
-        <footer class="text-center mt-12 py-8 border-t border-slate-200">
-            <p class="text-slate-600">© 2024 - Exploração Interativa do Cálculo na Ciência da Computação</p>
-            <div class="mt-4">
-                <a href="index.html" class="inline-block bg-teal-600 text-white py-2 px-6 rounded-full shadow hover:bg-teal-700 transition-colors duration-300">
-                    🔄 Voltar à Exploração Interativa
-                </a>
-            </div>
-        </footer>
-
+      <!-- Footer -->
+      <footer class="footer">
+        <p>
+          © 2024 - Exploração Interativa do Cálculo na Ciência da Computação
+        </p>
+        <div>
+          <a href="index.html" class="footer-button">
+            🔄 Voltar à Exploração Interativa
+          </a>
+        </div>
+      </footer>
     </div>
-
-</body>
+  </body>
 </html>
