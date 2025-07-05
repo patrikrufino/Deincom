@@ -6,9 +6,7 @@ Uma exploração interativa de como as integrais e derivadas impulsionam a tecno
 
 ## 🚀 Acesso ao Site
 
-Acesse a aplicação online: [https://seu-usuario.github.io/seu-repositorio](https://seu-usuario.github.io/seu-repositorio)
-
-> **Nota:** Substitua `seu-usuario` e `seu-repositorio` pelos seus dados reais do GitHub.
+Acesse a aplicação online: [https://patrikrufino.github.io/Deincom/index.html](https://patrikrufino.github.io/Deincom/index.html)
 
 ## 📋 Sobre o Projeto
 
@@ -71,30 +69,6 @@ Este projeto oferece uma experiência interativa para entender como conceitos fu
 - **Consistência**: Mesmo padrão visual entre página principal e artigo
 - **Acessibilidade**: Contraste otimizado e elementos focáveis claramente definidos
 
-## 🚀 Configuração do GitHub Pages
-
-### Passo 1: Configurar o Repositório
-
-1. Faça push do código para seu repositório no GitHub
-2. Vá em **Settings** > **Pages**
-3. Em **Source**, selecione **Deploy from a branch**
-4. Escolha a branch **main** e pasta **/ (root)**
-5. Clique em **Save**
-
-### Passo 2: Personalizar a Configuração
-
-Edite o arquivo `_config.yml` e substitua:
-
-- `USERNAME` pelo seu nome de usuário do GitHub
-- `REPOSITORY_NAME` pelo nome do seu repositório
-- `Seu Nome` pelo seu nome real
-
-### Passo 3: Verificar o Deploy
-
-- O site ficará disponível em `https://seu-usuario.github.io/seu-repositorio`
-- O deploy pode levar alguns minutos
-- Verifique a aba **Actions** para acompanhar o processo
-
 ## 🎨 Design e Tema
 
 ### Sistema de Cores Apple
@@ -126,9 +100,6 @@ O projeto utiliza um sistema de variáveis CSS inspirado no design da Apple:
   /* ... outras variáveis */
 }
 ```
-
-Para personalizar, modifique as variáveis CSS no arquivo `index.html` e `artigo.html`.
-
 ### Conteúdo e Funcionalidades
 
 - **Textos**: Edite os objetos `contentData` no JavaScript de `index.html`
@@ -141,24 +112,6 @@ Para personalizar, modifique as variáveis CSS no arquivo `index.html` e `artigo
 - **Cards**: `border-radius: 20px`, `backdrop-filter: blur(20px)`
 - **Botões**: `border-radius: 12px`, transições suaves com `cubic-bezier`
 - **Navegação**: Estilo pill com estados hover refinados
-
-## 🔄 Histórico de Design
-
-### Versão 2.0 - Tema Apple (Atual)
-
-- **Visual**: Design limpo e minimalista inspirado na Apple
-- **Cores**: Paleta de branco, cinza claro e azul Apple (#007aff)
-- **Tipografia**: Sistema de fontes da Apple com anti-aliasing otimizado
-- **Componentes**: Cards com backdrop blur, botões refinados, animações suaves
-
-### Versão 1.0 - Tema Hacker (Anterior)
-
-- **Visual**: Estética terminal com fundo escuro
-- **Cores**: Verde neon (#00ff41) sobre fundo preto
-- **Tipografia**: Fontes monospace (Monaco, Hack)
-- **Efeitos**: Animações de scanning, glow effects, estilo matrix
-
-A migração manteve 100% da funcionalidade enquanto transformou completamente a experiência visual.
 
 ## 🤝 Contribuições
 
